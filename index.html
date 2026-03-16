@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Manifestações Culturais</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f4f4;
+margin:0;
+}
+
+header{
+background:#f59e0b;
+padding:25px;
+color:white;
+font-size:28px;
+font-weight:bold;
+}
+
+.sub{
+font-size:14px;
+margin-top:5px;
+}
+
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+padding:30px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 5px 10px rgba(0,0,0,0.15);
+cursor:pointer;
+transition:0.2s;
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.content{
+padding:15px;
+}
+
+.title{
+font-size:20px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:white;
+padding:25px;
+border-radius:10px;
+width:400px;
+}
+
+.close{
+margin-top:15px;
+background:#f59e0b;
+border:none;
+padding:10px;
+color:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+MANIFESTAÇÕES CULTURAIS
+<div class="sub">Ribeira do Pombal - Bahia</div>
+</header>
+
+<div class="container">
+
+<div class="card" onclick="abrir('festas')">
+<img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819">
+<div class="content">
+<div class="title">Festas Tradicionais</div>
+<p>Festa de Outubro e Cultureira com shows e apresentações.</p>
+</div>
+</div>
+
+<div class="card" onclick="abrir('comida')">
+<img src="https://images.unsplash.com/photo-1604908176997-431bfa7b13ad">
+<div class="content">
+<div class="title">Culinária Típica</div>
+<p>Cuscuz sertanejo, carne de sol e feijão de corda.</p>
+</div>
+</div>
+
+<div class="card" onclick="abrir('historia')">
+<img src="https://images.unsplash.com/photo-1599423300746-b62533397364">
+<div class="content">
+<div class="title">Raízes e Costumes</div>
+<p>Influência indígena Kiriri e tradição religiosa.</p>
+</div>
+</div>
+
+<div class="card" onclick="abrir('musica')">
+<img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4">
+<div class="content">
+<div class="title">Música e Dança</div>
+<p>Forró, quadrilhas e bandas filarmônicas.</p>
+</div>
+</div>
+
+</div>
+
+
+<div class="modal" id="modal">
+<div class="modal-box" id="texto"></div>
+</div>
+
+<script>
+
+function abrir(tipo){
+
+let conteudo = {
+festas:`<h2>Festas Tradicionais</h2>
+<p>A Festa de Outubro é um dos eventos mais importantes da cidade, com shows, cultura e celebrações populares.</p>
+<button class="close" onclick="fechar()">Fechar</button>`,
+
+comida:`<h2>Culinária Típica</h2>
+<p>Pratos tradicionais incluem carne de sol, cuscuz sertanejo, bode assado e feijão de corda.</p>
+<button class="close" onclick="fechar()">Fechar</button>`,
+
+historia:`<h2>Raízes e Costumes</h2>
+<p>A cultura local tem influência indígena Kiriri e forte presença da religiosidade católica.</p>
+<button class="close" onclick="fechar()">Fechar</button>`,
+
+musica:`<h2>Música e Dança</h2>
+<p>O forró domina as festas, acompanhado de quadrilhas juninas e bandas filarmônicas.</p>
+<button class="close" onclick="fechar()">Fechar</button>`
+}
+
+document.getElementById("texto").innerHTML = conteudo[tipo]
+document.getElementById("modal").style.display="flex"
+
+}
+
+function fechar(){
+document.getElementById("modal").style.display="none"
+}
+
+</script>
+
+</body>
+</html>
