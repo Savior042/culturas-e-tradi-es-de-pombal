@@ -13,54 +13,53 @@ font-family:Segoe UI, Arial;
 
 body{
 margin:0;
-background:linear-gradient(135deg,#ffb347,#ffcc33);
-min-height:100vh;
+background:#0f0f0f;
+color:white;
 }
 
 header{
 text-align:center;
-padding:35px;
-color:white;
+padding:40px;
+background:linear-gradient(90deg,#ff8c00,#ffb300);
 }
 
 header h1{
 margin:0;
-font-size:40px;
+font-size:38px;
 letter-spacing:2px;
 }
 
 header p{
-margin-top:5px;
-font-size:16px;
-opacity:0.9;
+margin-top:6px;
+opacity:.9;
 }
 
 .container{
 max-width:1100px;
 margin:auto;
-padding:30px;
+padding:35px;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:25px;
 }
 
 .card{
-background:white;
+background:#1c1c1c;
 border-radius:14px;
 overflow:hidden;
-box-shadow:0 8px 20px rgba(0,0,0,0.2);
+box-shadow:0 10px 25px rgba(0,0,0,0.6);
 cursor:pointer;
-transition:0.3s;
+transition:.3s;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.02);
-box-shadow:0 15px 30px rgba(0,0,0,0.3);
+transform:translateY(-8px) scale(1.03);
+box-shadow:0 15px 40px rgba(0,0,0,0.9);
 }
 
 .card img{
 width:100%;
-height:180px;
+height:190px;
 object-fit:cover;
 }
 
@@ -70,12 +69,12 @@ padding:18px;
 
 .content h3{
 margin:0 0 8px;
-color:#d35400;
+color:#ffb300;
 }
 
 .content p{
 margin:0;
-color:#444;
+color:#ccc;
 font-size:14px;
 }
 
@@ -86,49 +85,48 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.7);
+background:rgba(0,0,0,.85);
 align-items:center;
 justify-content:center;
 padding:20px;
 }
 
 .modal-box{
-background:white;
-max-width:600px;
+background:#1b1b1b;
+max-width:650px;
 width:100%;
-border-radius:12px;
+border-radius:10px;
 padding:30px;
-animation:fade .3s;
+animation:fade .25s;
 }
 
 .modal-box h2{
+color:#ffb300;
 margin-top:0;
-color:#d35400;
 }
 
 .modal-box p{
+color:#ddd;
 line-height:1.6;
-color:#444;
 }
 
 .close{
 margin-top:20px;
-padding:10px 20px;
-background:#f39c12;
+padding:10px 22px;
+background:#ff9800;
 border:none;
 color:white;
-font-size:14px;
 border-radius:6px;
 cursor:pointer;
 }
 
 .close:hover{
-background:#e67e22;
+background:#ff6f00;
 }
 
 @keyframes fade{
-from{transform:scale(.9);opacity:0}
-to{transform:scale(1);opacity:1}
+from{opacity:0;transform:scale(.9)}
+to{opacity:1;transform:scale(1)}
 }
 
 </style>
@@ -144,39 +142,38 @@ to{transform:scale(1);opacity:1}
 <div class="container">
 
 <div class="card" onclick="abrir('festas')">
-<img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819">
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Festa_junina_quadrilha.jpg">
 <div class="content">
 <h3>Festas Tradicionais</h3>
-<p>Grandes eventos culturais que movimentam toda a cidade.</p>
+<p>Eventos populares que movimentam a cultura da cidade.</p>
 </div>
 </div>
 
 <div class="card" onclick="abrir('culinaria')">
-<img src="https://images.unsplash.com/photo-1604908176997-431bfa7b13ad">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Carne_de_sol_com_cuscuz.jpg">
 <div class="content">
 <h3>Culinária Típica</h3>
-<p>Sabores marcantes da cultura nordestina.</p>
+<p>Sabores fortes do sertão baiano.</p>
 </div>
 </div>
 
 <div class="card" onclick="abrir('historia')">
-<img src="https://images.unsplash.com/photo-1599423300746-b62533397364">
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Povo_Kiriri.jpg">
 <div class="content">
 <h3>Raízes e Costumes</h3>
-<p>Influências indígenas e tradições religiosas.</p>
+<p>Influência indígena e tradição religiosa.</p>
 </div>
 </div>
 
 <div class="card" onclick="abrir('musica')">
-<img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Forro_dance.jpg">
 <div class="content">
 <h3>Música e Dança</h3>
-<p>Forró, quadrilhas e manifestações populares.</p>
+<p>Forró, quadrilha e cultura nordestina.</p>
 </div>
 </div>
 
 </div>
-
 
 <div class="modal" id="modal">
 <div class="modal-box" id="texto"></div>
@@ -186,29 +183,27 @@ to{transform:scale(1);opacity:1}
 
 function abrir(tipo){
 
-let dados = {
+let dados={
 
 festas:`
 <h2>Festas Tradicionais</h2>
 
 <p>
-Ribeira do Pombal possui diversas celebrações populares que fazem parte
-da identidade cultural da cidade. Entre as mais importantes está a
-<strong>Festa de Outubro</strong>, que reúne moradores e visitantes
-para shows musicais, apresentações culturais, feiras e atividades
-tradicionais.
+Em Ribeira do Pombal, as festas populares são uma das maiores
+expressões culturais da cidade. Entre os principais eventos estão
+as festas religiosas, comemorações juninas e eventos culturais
+realizados na praça e em espaços públicos.
 </p>
 
 <p>
-Outro destaque são as festas religiosas e eventos comunitários que
-acontecem durante o ano, reforçando o sentimento de união entre os
-moradores. Essas celebrações misturam música, dança, culinária típica
-e manifestações culturais do sertão baiano.
+Durante essas celebrações acontecem apresentações musicais,
+quadrilhas, comidas típicas e atividades culturais que reúnem
+moradores e visitantes da região.
 </p>
 
 <p>
-Esses eventos ajudam a manter viva a tradição cultural da região
-e também movimentam o turismo e o comércio local.
+Esses eventos ajudam a fortalecer a identidade cultural
+do município e mantêm vivas as tradições do interior da Bahia.
 </p>
 
 <button class="close" onclick="fechar()">Fechar</button>
@@ -218,24 +213,20 @@ culinaria:`
 <h2>Culinária Típica</h2>
 
 <p>
-A culinária de Ribeira do Pombal reflete os sabores tradicionais do
-sertão da Bahia. Os pratos são conhecidos por serem simples,
-nutritivos e cheios de sabor.
+A culinária de Ribeira do Pombal é influenciada pelos costumes
+do sertão baiano. Os pratos são simples, porém muito saborosos
+e preparados com ingredientes tradicionais da região.
 </p>
 
 <p>
-Entre os alimentos mais populares estão o
-<strong>cuscuz sertanejo</strong>, a
-<strong>carne de sol</strong>,
-o <strong>bode assado</strong>
-e o tradicional <strong>feijão de corda</strong>.
-Esses pratos fazem parte do dia a dia das famílias da região.
+Entre os mais conhecidos estão o cuscuz sertanejo,
+carne de sol, bode assado, feijão de corda e diversos pratos
+feitos com milho, principalmente durante festas juninas.
 </p>
 
 <p>
-Durante festas e eventos culturais, também é comum encontrar
-doces caseiros, bolos típicos e comidas feitas de milho,
-que representam muito bem a tradição gastronômica nordestina.
+A comida típica representa muito da cultura local e costuma
+estar presente em feiras, festas populares e reuniões familiares.
 </p>
 
 <button class="close" onclick="fechar()">Fechar</button>
@@ -245,22 +236,22 @@ historia:`
 <h2>Raízes e Costumes</h2>
 
 <p>
-A cultura de Ribeira do Pombal possui fortes influências dos povos
-indígenas que habitaram a região, principalmente o povo
-<strong>Kiriri</strong>. Esses povos contribuíram para a formação
-de diversos costumes, tradições e conhecimentos locais.
+A história cultural da região tem forte influência dos povos
+indígenas, especialmente do povo Kiriri, que habita áreas da
+Bahia há muitos séculos.
 </p>
 
 <p>
-Além da influência indígena, a religiosidade também tem papel
-importante na cultura da cidade. A presença da
-<strong>religião católica</strong> é muito marcante em celebrações,
-procissões e festas de padroeiros.
+Além das raízes indígenas, a religiosidade católica também
+marcou profundamente a cultura local, com celebrações,
+procissões e festas religiosas que fazem parte da tradição
+da população.
 </p>
 
 <p>
-Essas tradições são transmitidas de geração em geração,
-mantendo viva a identidade cultural da comunidade.
+Essas influências ajudaram a formar os costumes, valores
+e tradições que fazem parte da identidade cultural
+de Ribeira do Pombal.
 </p>
 
 <button class="close" onclick="fechar()">Fechar</button>
@@ -270,29 +261,27 @@ musica:`
 <h2>Música e Dança</h2>
 
 <p>
-A música é uma parte fundamental das manifestações culturais da cidade.
-O ritmo mais presente é o <strong>forró</strong>, muito popular nas
-festas locais e nas comemorações juninas.
+A música é uma das manifestações culturais mais presentes
+na região. O forró é o ritmo mais popular, especialmente
+durante as festas juninas e eventos comunitários.
 </p>
 
 <p>
-Durante o período de São João, acontecem apresentações de
-<strong>quadrilhas juninas</strong>, que envolvem dança,
-figurinos coloridos e encenações tradicionais.
+As quadrilhas juninas também fazem parte dessa tradição,
+com danças coreografadas, figurinos coloridos e apresentações
+que envolvem jovens e adultos da comunidade.
 </p>
 
 <p>
-Outro elemento cultural importante são as
-<strong>bandas filarmônicas</strong> da região,
-que participam de eventos cívicos, religiosos e culturais,
-mantendo viva a tradição musical local.
+Além disso, bandas e grupos musicais locais contribuem
+para manter viva a cultura musical nordestina na cidade.
 </p>
 
 <button class="close" onclick="fechar()">Fechar</button>
 `
 }
 
-document.getElementById("texto").innerHTML = dados[tipo]
+document.getElementById("texto").innerHTML=dados[tipo]
 document.getElementById("modal").style.display="flex"
 
 }
