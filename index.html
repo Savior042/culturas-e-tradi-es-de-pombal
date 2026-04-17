@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escolha & Pense • Distraia a mente e decida</title>
+    <title>Pensar Quiz • 30 perguntas que revelam tudo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
         
         :root {
             --tw-color-primary: #22d3ee;
@@ -25,30 +25,52 @@
         }
 
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .card-hover:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 25px 50px -12px rgb(34 211 238);
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 25px 25px 50px -12px rgb(34 211 238);
         }
 
-        .spin {
-            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        .question-card {
+            animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(1440deg); }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .progress-bar {
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .option-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .option-btn:hover {
+            transform: scale(1.03);
+            background-color: #22d3ee;
+            color: #0f172a;
+            border-color: #22d3ee;
+        }
+        
+        .option-btn.selected {
+            background-color: #22d3ee;
+            color: #0f172a;
+            border-color: #22d3ee;
+            transform: scale(1.05);
         }
 
         .result-pop {
-            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.15); }
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.15); }
             100% { transform: scale(1); opacity: 1; }
         }
 
@@ -57,393 +79,587 @@
         }
     </style>
 </head>
-<body class="hero-bg text-white min-h-screen">
+<body class="hero-bg text-white min-h-screen pb-12">
     <!-- HEADER -->
-    <header class="border-b border-cyan-500/30 bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+    <header class="border-b border-cyan-400/30 bg-slate-900/90 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-cyan-400 rounded-2xl flex items-center justify-center text-3xl shadow-inner floating">🌀</div>
-                <h1 class="title-font text-3xl tracking-tighter">Escolha &amp; Pense</h1>
+                <div class="w-11 h-11 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-3xl flex items-center justify-center text-4xl shadow-xl floating">🧠</div>
+                <h1 class="title-font text-4xl tracking-[-2px]">Pensar Quiz</h1>
             </div>
-            <div class="flex items-center gap-8 text-sm font-medium">
-                <a onclick="showHome()" class="cursor-pointer hover:text-cyan-400 transition-colors">Início</a>
-                <a onclick="switchCategory(0)" class="cursor-pointer hover:text-cyan-400 transition-colors">Comida</a>
-                <a onclick="switchCategory(1)" class="cursor-pointer hover:text-cyan-400 transition-colors">Fazer</a>
-                <a onclick="switchCategory(2)" class="cursor-pointer hover:text-cyan-400 transition-colors">Assistir</a>
-                <a onclick="switchCategory(3)" class="cursor-pointer hover:text-cyan-400 transition-colors">Pensar</a>
-                <button onclick="randomEverything()" 
-                        class="px-6 py-2 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-semibold rounded-3xl flex items-center gap-2 transition-all active:scale-95">
-                    <span class="text-xl">🎲</span>
-                    DECISÃO TOTAL
-                </button>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-800 px-4 py-2 rounded-3xl border border-cyan-400/30">
-                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                Bahia mode ativado
+            <div class="flex items-center gap-4 text-sm font-medium">
+                <a onclick="restartQuiz()" class="cursor-pointer hover:text-cyan-400 flex items-center gap-1 transition-colors">
+                    <span>⟳</span> Reiniciar
+                </a>
+                <div class="px-5 py-2 bg-slate-800 rounded-3xl text-xs flex items-center gap-2 border border-cyan-400/20">
+                    <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                    30 PERGUNTAS • BAHIA MODE
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="max-w-5xl mx-auto px-6 pt-8">
         
-        <!-- HOME / WELCOME -->
-        <div id="home-screen">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-                <div class="inline-flex items-center gap-2 bg-cyan-400/10 text-cyan-400 text-sm font-medium px-5 py-2 rounded-3xl mb-6">
+        <!-- INTRO SCREEN -->
+        <div id="intro-screen">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="inline-flex px-6 py-3 bg-cyan-400/10 text-cyan-400 rounded-3xl text-sm font-semibold mb-6 tracking-widest items-center gap-3">
                     <span class="relative flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-400"></span>
                     </span>
-                    PRONTO PARA DISTRAIR A CABEÇA?
+                    PRONTO PARA CONHECER SUA MENTE?
                 </div>
                 
-                <h2 class="title-font text-6xl leading-none tracking-tighter mb-6">
-                    Deixe eu escolher por você.<br>
-                    Depois pense no porquê.
+                <h2 class="title-font text-6xl leading-none tracking-[-2px] mb-6">
+                    30 perguntas.<br>
+                    Uma resposta que faz sentido.
                 </h2>
-                <p class="text-xl text-slate-400">
-                    Um site simples, bonito e viciante para tomar decisões aleatórias.<br>
-                    Comida, atividades, séries ou reflexões profundas. 
-                    Perfeito pra quem está em Ribeira do Pombal e quer dar um tempo na cabeça.
+                <p class="text-xl text-slate-300 mb-10">
+                    Responda com sinceridade. Não tem certo ou errado.<br>
+                    No final, o quiz revela algo real sobre como você se distrai e pensa.
                 </p>
                 
-                <div class="mt-12 flex flex-wrap justify-center gap-4">
-                    <button onclick="switchCategory(0)" 
-                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
-                        <div class="text-5xl mb-4">🍲</div>
-                        <h3 class="text-2xl font-semibold">O que comer?</h3>
-                        <p class="text-slate-400 mt-2">De tapioca com queijo coalho até moqueca baiana</p>
-                    </button>
-                    <button onclick="switchCategory(1)" 
-                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
-                        <div class="text-5xl mb-4">🏃‍♂️</div>
-                        <h3 class="text-2xl font-semibold">O que fazer agora?</h3>
-                        <p class="text-slate-400 mt-2">Atividades que distraem e recarregam</p>
-                    </button>
-                    <button onclick="switchCategory(2)" 
-                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
-                        <div class="text-5xl mb-4">📺</div>
-                        <h3 class="text-2xl font-semibold">O que assistir?</h3>
-                        <p class="text-slate-400 mt-2">Séries, filmes e vídeos pra perder a noção do tempo</p>
-                    </button>
-                    <button onclick="switchCategory(3)" 
-                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
-                        <div class="text-5xl mb-4">🧠</div>
-                        <h3 class="text-2xl font-semibold">Pensar um pouco</h3>
-                        <p class="text-slate-400 mt-2">Perguntas que fazem a mente viajar</p>
-                    </button>
+                <div onclick="startQuiz()" 
+                     class="cursor-pointer mx-auto inline-flex items-center justify-center gap-4 bg-white text-slate-900 hover:bg-cyan-300 font-semibold text-2xl px-14 py-7 rounded-3xl shadow-2xl card-hover">
+                    <span>COMEÇAR O QUIZ</span>
+                    <span class="text-4xl">→</span>
                 </div>
-            </div>
-
-            <div class="text-center text-slate-500 text-sm flex items-center justify-center gap-6">
-                <div>💡 Feito só pra você relaxar e pensar</div>
-                <div class="h-px w-12 bg-slate-700"></div>
-                <div>Salve como index.html e abra no navegador</div>
-                <div class="h-px w-12 bg-slate-700"></div>
-                <div>Zero internet necessária depois</div>
-            </div>
-        </div>
-
-        <!-- CATEGORY SCREEN -->
-        <div id="category-screen" class="hidden">
-            <div class="flex items-center justify-between mb-8">
-                <button onclick="showHome()" class="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium">
-                    ← Voltar
-                </button>
-                <h2 id="category-title" class="title-font text-4xl"></h2>
-                <button onclick="getRandomChoice()" 
-                        class="px-8 py-3 bg-white text-slate-900 font-semibold rounded-3xl flex items-center gap-3 hover:scale-105 transition-transform">
-                    <span class="text-2xl">🎰</span>
-                    <span id="random-btn-text">ESCOLHER ALEATÓRIO</span>
-                </button>
-            </div>
-
-            <!-- Resultado -->
-            <div id="result-area" class="hidden bg-slate-900 border border-cyan-400/30 rounded-3xl p-8 mb-8">
-                <div class="flex items-start gap-6">
-                    <div id="emoji-result" class="text-8xl"></div>
-                    <div class="flex-1">
-                        <p class="uppercase text-cyan-400 text-sm tracking-widest mb-1">A escolha caiu em...</p>
-                        <h3 id="choice-text" class="text-4xl font-semibold leading-tight"></h3>
-                        
-                        <div class="mt-8 bg-slate-800 rounded-2xl p-5 text-slate-300 text-lg" id="thinking-prompt">
-                            <!-- JS vai preencher -->
-                        </div>
-
-                        <div class="flex gap-4 mt-8">
-                            <button onclick="getRandomChoice()" 
-                                    class="flex-1 py-4 bg-slate-800 hover:bg-slate-700 rounded-3xl font-medium">Outra escolha</button>
-                            <button onclick="saveChoice()" 
-                                    class="flex-1 py-4 bg-cyan-400 hover:bg-cyan-300 text-slate-900 rounded-3xl font-medium">Salvar essa escolha</button>
-                        </div>
+                
+                <div class="mt-12 text-slate-400 text-sm flex items-center justify-center gap-8">
+                    <div class="flex items-center gap-2">
+                        <span class="text-cyan-400">🌀</span> Uma pergunta por vez
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-cyan-400">📊</span> Progresso em tempo real
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-cyan-400">✨</span> Resultado surpreendente
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Lista de opções -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="options-grid">
-                <!-- JS preenche -->
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="hidden">
+            <div class="mb-8 flex items-center justify-between">
+                <button onclick="previousQuestion()" 
+                        id="btn-prev"
+                        class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-medium">
+                    ← Voltar
+                </button>
+                
+                <div class="flex-1 mx-8">
+                    <div class="text-xs uppercase tracking-widest text-cyan-400 mb-2 flex justify-between items-baseline">
+                        <span>Pergunta <span id="current-q" class="text-3xl font-semibold text-white">1</span>/30</span>
+                        <span id="progress-text" class="font-mono">0%</span>
+                    </div>
+                    <div class="h-3 bg-slate-800 rounded-3xl overflow-hidden">
+                        <div id="progress-bar" class="progress-bar h-3 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-3xl w-0"></div>
+                    </div>
+                </div>
+                
+                <div class="text-slate-400 text-sm font-medium">Pensar Quiz</div>
+            </div>
+
+            <!-- PERGUNTA -->
+            <div id="question-card" class="question-card bg-slate-900 border border-slate-700 rounded-3xl p-10 mb-8">
+                <div id="question-text" class="text-3xl leading-tight font-medium mb-12"></div>
+                
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- JS preenche as opções -->
+                </div>
+            </div>
+
+            <div class="flex justify-between text-sm">
+                <div onclick="restartQuiz()" class="cursor-pointer text-slate-400 hover:text-red-400 flex items-center gap-1">
+                    <span>🗑️</span> Reiniciar quiz
+                </div>
+                <div id="question-counter" class="font-mono text-cyan-400">1 de 30</div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="hidden text-center">
+            <div class="max-w-xl mx-auto">
+                <div id="result-emoji" class="text-[180px] leading-none mb-6 floating"></div>
+                
+                <h2 id="result-title" class="title-font text-5xl mb-3"></h2>
+                <p id="result-subtitle" class="text-cyan-400 text-xl font-medium mb-8"></p>
+                
+                <div id="result-desc" class="bg-slate-800/70 border border-cyan-400/30 rounded-3xl p-8 text-left text-lg leading-relaxed text-slate-200 mb-10"></div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="restartQuiz()" 
+                            class="flex-1 py-5 rounded-3xl bg-slate-800 hover:bg-slate-700 text-lg font-semibold">
+                        Fazer o quiz novamente
+                    </button>
+                    <button onclick="shareResult()" 
+                            class="flex-1 py-5 rounded-3xl bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-900 text-lg font-semibold flex items-center justify-center gap-3">
+                        <span>Compartilhar meu resultado</span>
+                        <span class="text-2xl">📤</span>
+                    </button>
+                </div>
+                
+                <p class="mt-10 text-xs text-slate-500">
+                    Feito com carinho pra você que gosta de distrair a cabeça e pensar melhor • 
+                    Continuação do Escolha &amp; Pense
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="max-w-6xl mx-auto px-6 py-8 border-t border-slate-700 text-xs text-slate-500 flex justify-between items-center">
-        <div>
-            Feito com carinho por Grok • só pra você se distrair e pensar melhor
-        </div>
-        <div onclick="clearSaved()" class="cursor-pointer hover:text-white transition-colors">
-            🗑️ Limpar escolhas salvas
-        </div>
-        <div class="text-cyan-400">v1.0 • Bahia edition</div>
-    </footer>
-
     <script>
-        // Tailwind script activation
-        function initTailwind() {
-            tailwind.config = {
-                content: [],
-                theme: {
-                    extend: {}
-                }
-            }
-        }
-
-        // Dados das categorias (analisei várias vezes: misturei comida baiana, diversão e reflexão profunda)
-        const categories = [
+        // === DADOS DO QUIZ ===
+        const questions = [
             {
-                id: 0,
-                name: "O que comer hoje?",
-                emoji: "🍲",
+                q: "Quando você tem tempo livre de repente, o que costuma fazer para distrair a cabeça?",
                 options: [
-                    { text: "Tapioca com queijo coalho e manteiga de garrafa", emoji: "🥟" },
-                    { text: "Moqueca baiana de peixe com dendê", emoji: "🐟" },
-                    { text: "Açaí na tigela com banana e granola", emoji: "🥭" },
-                    { text: "Vatapá com camarão e arroz branco", emoji: "🍤" },
-                    { text: "Feijão tropeiro com farofa crocante", emoji: "🫘" },
-                    { text: "Pizza de calabresa com borda recheada", emoji: "🍕" },
-                    { text: "Carne de sol com macaxeira frita", emoji: "🥩" },
-                    { text: "Salada de quinoa com abacate e manga", emoji: "🥑" },
-                    { text: "Bobó de camarão bem cremoso", emoji: "🍲" },
-                    { text: "Pão de queijo mineiro quentinho com café", emoji: "☕" }
-                ],
-                prompt: "Por que essa comida? O que ela te lembra de bom? Se pudesse adicionar um ingrediente surpresa, qual seria?"
+                    { text: "Explorar algo novo (rua, app, ideia)", type: 0 },
+                    { text: "Criar algo: desenhar, cozinhar diferente, inventar", type: 1 },
+                    { text: "Pensar profundamente sobre uma coisa que te intriga", type: 2 },
+                    { text: "Ficar quieto, respirar e deixar a mente descansar", type: 3 }
+                ]
             },
             {
-                id: 1,
-                name: "O que fazer agora?",
-                emoji: "🏃‍♂️",
+                q: "Na hora de tomar uma decisão importante, você...",
                 options: [
-                    { text: "Dançar 3 músicas baianas sem parar (coloca no YouTube)", emoji: "💃" },
-                    { text: "Fazer um desenho aleatório de 10 minutos", emoji: "🎨" },
-                    { text: "Meditar 7 minutos com o som da chuva (tem no YouTube)", emoji: "🌧️" },
-                    { text: "Limpar só uma gaveta da casa (surpreendentemente relaxante)", emoji: "🧹" },
-                    { text: "Ligar pro amigo e contar uma história engraçada", emoji: "📞" },
-                    { text: "Cozinhar algo que nunca fez antes (mesmo que simples)", emoji: "👨‍🍳" },
-                    { text: "Caminhar 15 minutos olhando pro céu", emoji: "🚶" },
-                    { text: "Jogar um jogo de celular offline", emoji: "🎮" },
-                    { text: "Escrever 3 coisas que você curte na sua vida atual", emoji: "📝" },
-                    { text: "Fazer alongamento enquanto escuta forró", emoji: "🧘" }
-                ],
-                prompt: "Depois de fazer isso, como você se sente? Mudou algo na sua energia?"
+                    { text: "Vai no instinto e vê no que dá", type: 0 },
+                    { text: "Imagina várias histórias e possibilidades criativas", type: 1 },
+                    { text: "Faz uma lista detalhada de prós e contras", type: 2 },
+                    { text: "Espera sentir paz interior antes de escolher", type: 3 }
+                ]
             },
             {
-                id: 2,
-                name: "O que assistir?",
-                emoji: "📺",
+                q: "Qual comida te faz pensar 'hoje é um bom dia'?",
                 options: [
-                    { text: "The Office (pra rir e esquecer do mundo)", emoji: "😂" },
-                    { text: "Um episódio de Black Mirror (pra pensar depois)", emoji: "📱" },
-                    { text: "Documentário sobre o universo no Netflix/YouTube", emoji: "🌌" },
-                    { text: "Stand-up do Fábio Porchat ou Whindersson", emoji: "🎤" },
-                    { text: "Série brasileira 'Cidade Invisível'", emoji: "🇧🇷" },
-                    { text: "ASMR de comida brasileira (tem no YouTube)", emoji: "🍜" },
-                    { text: "Filme 'Tudo em Todo Lugar ao Mesmo Tempo'", emoji: "🌎" },
-                    { text: "Vídeos de viagens pelo Nordeste", emoji: "🏖️" },
-                    { text: "Rick and Morty (temporada aleatória)", emoji: "👽" },
-                    { text: "Podcast visual sobre filosofia (tipo 'Filosofia em 5 minutos')", emoji: "🧠" }
-                ],
-                prompt: "Depois de assistir, o que você pensou? Te fez querer fazer algo diferente?"
+                    { text: "Algo novo e diferente que eu nunca experimentei", type: 0 },
+                    { text: "Algo que eu mesmo posso inventar na cozinha", type: 1 },
+                    { text: "Algo tradicional que eu saboreio com calma", type: 2 },
+                    { text: "Algo simples e confortável que me relaxa", type: 3 }
+                ]
             },
             {
-                id: 3,
-                name: "Pensar um pouco...",
-                emoji: "🧠",
+                q: "Se pudesse escolher uma atividade para hoje à tarde em Ribeira do Pombal...",
                 options: [
-                    { text: "Se você tivesse só mais 1 ano de vida, o que faria diferente amanhã?", emoji: "⏳" },
-                    { text: "Qual é a coisa mais corajosa que você já fez (mesmo pequena)?", emoji: "🦸" },
-                    { text: "O que te faz sentir vivo de verdade?", emoji: "❤️" },
-                    { text: "Se dinheiro não fosse problema, como seria seu dia perfeito?", emoji: "🌅" },
-                    { text: "Qual memória da infância você mais gostaria de reviver?", emoji: "🪄" },
-                    { text: "O que você diria pro seu 'eu' de 10 anos atrás?", emoji: "📆" },
-                    { text: "Qual hábito pequeno você poderia mudar pra melhorar tudo?", emoji: "🔄" },
-                    { text: "Se pudesse ter uma conversa com qualquer pessoa do mundo, quem seria?", emoji: "🗣️" },
-                    { text: "O que você aprendeu com um 'não' recente?", emoji: "❌" },
-                    { text: "Qual é o maior sonho que você ainda não contou pra ninguém?", emoji: "🌟" }
-                ],
-                prompt: "Escreva aqui o que veio na sua cabeça (ou só pense em silêncio). A escolha é sua."
+                    { text: "Explorar um caminho novo perto do rio ou praça", type: 0 },
+                    { text: "Fazer um artesanato ou desenho inspirado na Bahia", type: 1 },
+                    { text: "Ler algo ou pensar sobre um assunto que não sei", type: 2 },
+                    { text: "Sentar na sombra e só observar o mundo passar", type: 3 }
+                ]
+            },
+            {
+                q: "Qual tipo de série ou filme te distrai mais?",
+                options: [
+                    { text: "Aventura e exploração em lugares desconhecidos", type: 0 },
+                    { text: "Histórias criativas e originais com twists malucos", type: 1 },
+                    { text: "Tramas complexas ou documentários para analisar", type: 2 },
+                    { text: "Comédias leves ou coisas tranquilas para relaxar", type: 3 }
+                ]
+            },
+            {
+                q: "Quando escuta música, você prefere...",
+                options: [
+                    { text: "Músicas novas que te levam pra outro lugar", type: 0 },
+                    { text: "Músicas que te inspiram a criar ou dançar", type: 1 },
+                    { text: "Músicas com letra profunda pra refletir", type: 2 },
+                    { text: "Músicas calmas que acalmam a mente", type: 3 }
+                ]
+            },
+            {
+                q: "Se pudesse viajar para qualquer lugar do mundo agora, iria para...",
+                options: [
+                    { text: "Um lugar totalmente novo e cheio de descobertas", type: 0 },
+                    { text: "Um lugar inspirador pra criar e sonhar", type: 1 },
+                    { text: "Um lugar histórico pra pensar na vida", type: 2 },
+                    { text: "Um lugar tranquilo pra só curtir o momento", type: 3 }
+                ]
+            },
+            {
+                q: "Qual é o seu jeito favorito de aprender algo novo?",
+                options: [
+                    { text: "Praticando na hora, testando tudo", type: 0 },
+                    { text: "Inventando minhas próprias formas de fazer", type: 1 },
+                    { text: "Estudando e entendendo o porquê de tudo", type: 2 },
+                    { text: "De forma leve e sem pressão", type: 3 }
+                ]
+            },
+            {
+                q: "Quando um amigo está com problema, você...",
+                options: [
+                    { text: "Sugere uma aventura pra ele esquecer", type: 0 },
+                    { text: "Cria uma solução criativa e fora da caixa", type: 1 },
+                    { text: "Analisa o problema junto e dá conselhos lógicos", type: 2 },
+                    { text: "Apenas escuta e oferece calma", type: 3 }
+                ]
+            },
+            {
+                q: "O que você faz quando está entediado de verdade?",
+                options: [
+                    { text: "Saio procurando algo novo pra fazer", type: 0 },
+                    { text: "Crio um projeto aleatório só por diversão", type: 1 },
+                    { text: "Penso em questões profundas da vida", type: 2 },
+                    { text: "Deito e deixo a mente vagar em paz", type: 3 }
+                ]
+            },
+            {
+                q: "Como você imagina o seu futuro daqui a 5 anos?",
+                options: [
+                    { text: "Cheio de viagens e novas experiências", type: 0 },
+                    { text: "Cheio de projetos criativos e ideias", type: 1 },
+                    { text: "Com tudo planejado e bem estruturado", type: 2 },
+                    { text: "Com paz, equilíbrio e felicidade simples", type: 3 }
+                ]
+            },
+            {
+                q: "Qual memória do passado você gosta de revisitar na mente?",
+                options: [
+                    { text: "Aquela aventura ou momento de descoberta", type: 0 },
+                    { text: "Aquele momento em que criei algo incrível", type: 1 },
+                    { text: "Aquele dia em que entendi algo importante", type: 2 },
+                    { text: "Um momento simples de paz e alegria", type: 3 }
+                ]
+            },
+            {
+                q: "Tecnologia ou natureza: o que te ajuda mais a pensar?",
+                options: [
+                    { text: "Tecnologia – abre portas pra coisas novas", type: 0 },
+                    { text: "As duas – uso pra criar coisas", type: 1 },
+                    { text: "Tecnologia pra pesquisar e analisar", type: 2 },
+                    { text: "Natureza pra acalmar e conectar", type: 3 }
+                ]
+            },
+            {
+                q: "Quando tem uma ideia louca, você...",
+                options: [
+                    { text: "Coloca em prática imediatamente", type: 0 },
+                    { text: "Desenvolve ela com criatividade", type: 1 },
+                    { text: "Analisa se faz sentido antes", type: 2 },
+                    { text: "Guarda pra um momento de calma", type: 3 }
+                ]
+            },
+            {
+                q: "Lógica ou intuição: qual você usa mais no dia a dia?",
+                options: [
+                    { text: "Intuição – sigo o que sinto na hora", type: 0 },
+                    { text: "Intuição pra criar, lógica pra executar", type: 1 },
+                    { text: "Lógica acima de tudo", type: 2 },
+                    { text: "Um equilíbrio natural entre as duas", type: 3 }
+                ]
+            },
+            {
+                q: "O que te traz mais paz mental?",
+                options: [
+                    { text: "Novas experiências e adrenalina boa", type: 0 },
+                    { text: "Criar e ver minhas ideias ganharem vida", type: 1 },
+                    { text: "Entender as coisas com clareza", type: 2 },
+                    { text: "Simplesmente estar presente no agora", type: 3 }
+                ]
+            },
+            {
+                q: "Você gosta mais de assumir riscos ou ficar na segurança?",
+                options: [
+                    { text: "Riscos – a vida é feita de escolhas ousadas", type: 0 },
+                    { text: "Riscos criativos, mas calculados", type: 1 },
+                    { text: "Segurança com planejamento", type: 2 },
+                    { text: "Nem um nem outro, só o que me faz bem", type: 3 }
+                ]
+            },
+            {
+                q: "Qual é o seu ritual favorito para relaxar?",
+                options: [
+                    { text: "Fazer algo diferente e estimulante", type: 0 },
+                    { text: "Criar algo pequeno e bonito", type: 1 },
+                    { text: "Pensar ou ler sobre temas interessantes", type: 2 },
+                    { text: "Respirar, alongar ou meditar", type: 3 }
+                ]
+            },
+            {
+                q: "Uma surpresa inesperada chega: sua reação é...",
+                options: [
+                    { text: "Empolgação total e já quero explorar", type: 0 },
+                    { text: "Vejo como oportunidade pra criar algo", type: 1 },
+                    { text: "Analiso o que isso significa", type: 2 },
+                    { text: "Aceito com calma e gratidão", type: 3 }
+                ]
+            },
+            {
+                q: "Prefere fazer atividades sozinho ou com outras pessoas?",
+                options: [
+                    { text: "Com pessoas – energia nova", type: 0 },
+                    { text: "Sozinho pra criar livremente", type: 1 },
+                    { text: "Depende, mas prefiro analisar sozinho", type: 2 },
+                    { text: "Tanto faz, o importante é a paz", type: 3 }
+                ]
+            },
+            {
+                q: "Aprender uma habilidade nova te faz sentir...",
+                options: [
+                    { text: "Curioso e pronto pra explorar mais", type: 0 },
+                    { text: "Inspirado e cheio de ideias", type: 1 },
+                    { text: "Focado e querendo dominar", type: 2 },
+                    { text: "Calmo e em harmonia", type: 3 }
+                ]
+            },
+            {
+                q: "O que é distração perfeita para você num dia estressante?",
+                options: [
+                    { text: "Fazer algo totalmente diferente", type: 0 },
+                    { text: "Criar ou expressar o que sinto", type: 1 },
+                    { text: "Pensar e organizar as ideias", type: 2 },
+                    { text: "Parar tudo e só descansar", type: 3 }
+                ]
+            },
+            {
+                q: "Quando pensa alto, você costuma...",
+                options: [
+                    { text: "Planejar a próxima aventura", type: 0 },
+                    { text: "Sonhar com projetos criativos", type: 1 },
+                    { text: "Questionar tudo com profundidade", type: 2 },
+                    { text: "Agradecer e encontrar gratidão", type: 3 }
+                ]
+            },
+            {
+                q: "Sua imaginação é mais...",
+                options: [
+                    { text: "Cheia de cenários novos e aventuras", type: 0 },
+                    { text: "Cheia de criações e histórias", type: 1 },
+                    { text: "Cheia de análises e conexões lógicas", type: 2 },
+                    { text: "Cheia de paz e cenários tranquilos", type: 3 }
+                ]
+            },
+            {
+                q: "Em um debate, você tende a...",
+                options: [
+                    { text: "Defender o que sente no momento", type: 0 },
+                    { text: "Trazer ideias criativas e originais", type: 1 },
+                    { text: "Usar argumentos lógicos e estruturados", type: 2 },
+                    { text: "Buscar o meio-termo e harmonia", type: 3 }
+                ]
+            },
+            {
+                q: "O equilíbrio na vida para você significa...",
+                options: [
+                    { text: "Ter sempre algo novo acontecendo", type: 0 },
+                    { text: "Ter espaço pra criar o que amo", type: 1 },
+                    { text: "Ter clareza e compreensão de tudo", type: 2 },
+                    { text: "Ter paz interior em qualquer situação", type: 3 }
+                ]
+            },
+            {
+                q: "Qual é a distração que te faz perder a noção do tempo?",
+                options: [
+                    { text: "Explorar coisas novas sem parar", type: 0 },
+                    { text: "Criar ou mergulhar em um projeto", type: 1 },
+                    { text: "Mergulhar em pensamentos profundos", type: 2 },
+                    { text: "Ficar presente e em silêncio", type: 3 }
+                ]
+            },
+            {
+                q: "Se a mente fosse um lugar, o seu seria...",
+                options: [
+                    { text: "Uma floresta selvagem cheia de trilhas novas", type: 0 },
+                    { text: "Um ateliê bagunçado de ideias", type: 1 },
+                    { text: "Uma biblioteca antiga e organizada", type: 2 },
+                    { text: "Uma praia calma ao pôr do sol", type: 3 }
+                ]
+            },
+            {
+                q: "O que você mudaria no seu jeito de pensar se pudesse?",
+                options: [
+                    { text: "Ser mais ousado e explorador", type: 0 },
+                    { text: "Ser ainda mais criativo e livre", type: 1 },
+                    { text: "Ser mais organizado e analítico", type: 2 },
+                    { text: "Não mudaria nada – já está bom", type: 3 }
+                ]
+            },
+            {
+                q: "Para terminar: qual frase te define melhor agora?",
+                options: [
+                    { text: "Quero descobrir o mundo e a mim mesmo", type: 0 },
+                    { text: "Quero criar algo que só eu posso fazer", type: 1 },
+                    { text: "Quero entender o que realmente importa", type: 2 },
+                    { text: "Quero viver com leveza e gratidão", type: 3 }
+                ]
             }
         ]
 
-        let currentCategory = null
-        let savedChoices = []
+        const resultTypes = [
+            {
+                title: "O Explorador",
+                emoji: "🌍",
+                subtitle: "Sua mente ama o novo e o desconhecido",
+                desc: "Você se distrai explorando ideias, lugares e sensações. Cada escolha é uma porta aberta. Em Ribeira do Pombal, você é aquele que sempre encontra um caminho diferente. Continue explorando – sua mente brilha quando o mundo é grande."
+            },
+            {
+                title: "O Criador",
+                emoji: "🎨",
+                subtitle: "Sua mente transforma tudo em arte",
+                desc: "Você pensa criando. Cada distração vira uma oportunidade de inventar algo novo. Seja na cozinha, no desenho ou na imaginação, você faz o comum virar extraordinário. Use essa força hoje – o mundo precisa da sua criatividade."
+            },
+            {
+                title: "O Analítico",
+                emoji: "🔎",
+                subtitle: "Sua mente busca entender tudo",
+                desc: "Você se distrai pensando profundamente e conectando pontos. Suas reflexões são poderosas e ajudam você a navegar pela vida com clareza. Continue questionando – é assim que você cresce e encontra respostas que os outros não veem."
+            },
+            {
+                title: "O Zen",
+                emoji: "🌊",
+                subtitle: "Sua mente é paz em movimento",
+                desc: "Você sabe se distrair com simplicidade e presença. Sua força está no equilíbrio e na calma interior. Em dias agitados, você lembra que pensar bem muitas vezes significa simplesmente estar. Mantenha essa leveza – ela é rara e valiosa."
+            }
+        ]
 
-        function showHome() {
-            document.getElementById('home-screen').classList.remove('hidden')
-            document.getElementById('category-screen').classList.add('hidden')
-            currentCategory = null
+        // Variáveis do quiz
+        let currentQuestionIndex = 0
+        let userAnswers = [] // armazena o type escolhido
+
+        function initTailwind() {
+            tailwind.config = { content: [] }
         }
 
-        function switchCategory(id) {
-            currentCategory = categories.find(c => c.id === id)
-            if (!currentCategory) return
+        function startQuiz() {
+            document.getElementById('intro-screen').classList.add('hidden')
+            document.getElementById('quiz-screen').classList.remove('hidden')
+            currentQuestionIndex = 0
+            userAnswers = []
+            renderCurrentQuestion()
+        }
 
-            document.getElementById('home-screen').classList.add('hidden')
-            document.getElementById('category-screen').classList.remove('hidden')
-
-            // Atualiza título
-            document.getElementById('category-title').innerHTML = `
-                ${currentCategory.emoji} ${currentCategory.name}
+        function renderCurrentQuestion() {
+            const q = questions[currentQuestionIndex]
+            
+            // Atualiza título da pergunta
+            document.getElementById('question-text').innerHTML = `
+                <span class="text-cyan-400 text-2xl block mb-3">Pergunta ${currentQuestionIndex + 1}</span>
+                ${q.q}
             `
-
-            // Limpa resultado anterior
-            document.getElementById('result-area').classList.add('hidden')
-
-            // Preenche opções
-            const grid = document.getElementById('options-grid')
-            grid.innerHTML = ''
-
-            currentCategory.options.forEach((opt, index) => {
+            
+            // Progresso
+            const progress = Math.round(((currentQuestionIndex) / 30) * 100)
+            document.getElementById('progress-bar').style.width = `${progress}%`
+            document.getElementById('progress-text').textContent = `${progress}%`
+            document.getElementById('current-q').textContent = currentQuestionIndex + 1
+            document.getElementById('question-counter').textContent = `${currentQuestionIndex + 1} de 30`
+            
+            // Desabilita botão voltar no início
+            document.getElementById('btn-prev').style.opacity = currentQuestionIndex === 0 ? '0.4' : '1'
+            document.getElementById('btn-prev').style.pointerEvents = currentQuestionIndex === 0 ? 'none' : 'auto'
+            
+            // Opções
+            const container = document.getElementById('options-container')
+            container.innerHTML = ''
+            
+            q.options.forEach((option, index) => {
                 const btn = document.createElement('button')
-                btn.className = `card-hover bg-slate-800 hover:bg-slate-700 border border-transparent hover:border-cyan-400/50 p-6 rounded-3xl text-left flex flex-col items-start transition-all`
+                btn.className = `option-btn w-full text-left px-8 py-6 rounded-3xl border-2 border-slate-700 bg-slate-800 text-lg font-medium flex items-center gap-4 hover:border-cyan-400`
                 btn.innerHTML = `
-                    <span class="text-4xl mb-3">${opt.emoji}</span>
-                    <span class="text-lg font-medium">${opt.text}</span>
+                    <span class="text-4xl">${['🌍','🎨','🔎','🌊'][option.type]}</span>
+                    <span>${option.text}</span>
                 `
-                btn.onclick = () => selectSpecificChoice(opt)
-                grid.appendChild(btn)
+                btn.onclick = () => selectAnswer(option.type, btn)
+                container.appendChild(btn)
             })
         }
 
-        function getRandomChoice() {
-            if (!currentCategory) return
-
-            const resultArea = document.getElementById('result-area')
-            resultArea.classList.remove('hidden')
+        function selectAnswer(type, buttonElement) {
+            // Remove seleção anterior
+            const allBtns = document.querySelectorAll('.option-btn')
+            allBtns.forEach(b => b.classList.remove('selected'))
             
-            // Animação de giro
-            const emojiEl = document.getElementById('emoji-result')
-            emojiEl.classList.add('spin')
+            // Seleciona atual
+            buttonElement.classList.add('selected')
             
-            // Escolhe aleatório
+            // Salva resposta
+            userAnswers[currentQuestionIndex] = type
+            
+            // Avança automaticamente após 600ms
             setTimeout(() => {
-                emojiEl.classList.remove('spin')
-                
-                const randomIndex = Math.floor(Math.random() * currentCategory.options.length)
-                const choice = currentCategory.options[randomIndex]
-                
-                document.getElementById('emoji-result').innerHTML = choice.emoji
-                document.getElementById('choice-text').textContent = choice.text
-                
-                // Prompt para pensar
-                const promptEl = document.getElementById('thinking-prompt')
-                promptEl.innerHTML = `
-                    <strong class="text-cyan-400">Agora pense nisto:</strong><br>
-                    ${currentCategory.prompt}
-                    <div class="mt-4 text-xs text-slate-400 italic">Escreva no bloco de notas ou só reflita. O importante é pensar.</div>
-                `
-                
-                // Efeito pop
-                resultArea.classList.add('result-pop')
-                setTimeout(() => resultArea.classList.remove('result-pop'), 800)
-            }, 900)
+                if (currentQuestionIndex < 29) {
+                    currentQuestionIndex++
+                    renderCurrentQuestion()
+                } else {
+                    showResult()
+                }
+            }, 650)
         }
 
-        function selectSpecificChoice(choice) {
-            const resultArea = document.getElementById('result-area')
-            resultArea.classList.remove('hidden')
-            
-            document.getElementById('emoji-result').innerHTML = choice.emoji
-            document.getElementById('choice-text').textContent = choice.text
-            
-            const promptEl = document.getElementById('thinking-prompt')
-            promptEl.innerHTML = `
-                <strong class="text-cyan-400">Agora pense nisto:</strong><br>
-                ${currentCategory.prompt}
-                <div class="mt-4 text-xs text-slate-400 italic">Escreva no bloco de notas ou só reflita. O importante é pensar.</div>
-            `
-            
-            resultArea.classList.add('result-pop')
-            setTimeout(() => resultArea.classList.remove('result-pop'), 800)
-        }
-
-        function saveChoice() {
-            const text = document.getElementById('choice-text').textContent
-            if (!text) return
-            
-            savedChoices.push({
-                category: currentCategory.name,
-                choice: text,
-                date: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})
-            })
-            
-            alert(`✅ Salvo! "${text}" foi guardado nas suas escolhas. Você pode ver depois se quiser.`)
-        }
-
-        function clearSaved() {
-            if (confirm('Apagar todas as escolhas salvas?')) {
-                savedChoices = []
-                alert('Tudo limpo! Pode começar do zero.')
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--
+                renderCurrentQuestion()
             }
         }
 
-        function randomEverything() {
-            // Escolhe uma categoria aleatória e faz uma escolha automática
-            const randomCat = categories[Math.floor(Math.random() * categories.length)]
-            currentCategory = randomCat
-            document.getElementById('home-screen').classList.add('hidden')
-            document.getElementById('category-screen').classList.remove('hidden')
+        function calculateResult() {
+            const counts = [0, 0, 0, 0] // 0=explorador, 1=criador, 2=analítico, 3=zen
             
-            document.getElementById('category-title').innerHTML = `
-                ${randomCat.emoji} ${randomCat.name} <span class="text-sm font-normal text-cyan-400">(decisão total!)</span>
-            `
+            userAnswers.forEach(type => {
+                if (typeof type === 'number') counts[type]++
+            })
             
-            // Mostra resultado direto
-            const resultArea = document.getElementById('result-area')
-            resultArea.classList.remove('hidden')
+            // Encontra o maior
+            let maxCount = Math.max(...counts)
+            let winnerIndex = counts.indexOf(maxCount)
             
-            const emojiEl = document.getElementById('emoji-result')
-            emojiEl.classList.add('spin')
-            
-            setTimeout(() => {
-                emojiEl.classList.remove('spin')
-                const randomIndex = Math.floor(Math.random() * randomCat.options.length)
-                const choice = randomCat.options[randomIndex]
-                
-                document.getElementById('emoji-result').innerHTML = choice.emoji
-                document.getElementById('choice-text').textContent = choice.text
-                
-                const promptEl = document.getElementById('thinking-prompt')
-                promptEl.innerHTML = `
-                    <strong class="text-cyan-400">Decisão aleatória do universo:</strong><br>
-                    ${randomCat.prompt}
-                    <div class="mt-6 p-4 bg-slate-800 rounded-2xl text-xs flex justify-between">
-                        <span>Você pode mudar de ideia quando quiser.</span>
-                        <span class="text-emerald-400">→ Próxima?</span>
-                    </div>
-                `
-            }, 800)
+            // Se empate, escolhe o primeiro com maior valor
+            return winnerIndex
         }
 
-        // Inicializa tudo
+        function showResult() {
+            document.getElementById('quiz-screen').classList.add('hidden')
+            document.getElementById('result-screen').classList.remove('hidden')
+            
+            const winner = calculateResult()
+            const result = resultTypes[winner]
+            
+            document.getElementById('result-emoji').textContent = result.emoji
+            document.getElementById('result-title').textContent = result.title
+            document.getElementById('result-subtitle').textContent = result.subtitle
+            document.getElementById('result-desc').innerHTML = `
+                ${result.desc}<br><br>
+                <span class="text-xs uppercase tracking-widest text-cyan-400">Dica do Grok:</span> 
+                Use esse seu tipo de mente para se distrair e pensar melhor hoje. 
+                O importante não é o resultado – é o que você faz com ele.
+            `
+            
+            // Efeito pop
+            const resultCard = document.getElementById('result-screen').querySelector('div')
+            resultCard.classList.add('result-pop')
+            setTimeout(() => resultCard.classList.remove('result-pop'), 1200)
+        }
+
+        function restartQuiz() {
+            document.getElementById('result-screen').classList.add('hidden')
+            document.getElementById('quiz-screen').classList.add('hidden')
+            document.getElementById('intro-screen').classList.remove('hidden')
+            currentQuestionIndex = 0
+            userAnswers = []
+        }
+
+        function shareResult() {
+            const winner = calculateResult()
+            const result = resultTypes[winner]
+            const text = `Acabei de descobrir que sou ${result.title} no Pensar Quiz! 🧠✨ ${result.subtitle}\n\nFeito com o site do Grok. Tenta você também!`
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.currentTarget
+                const original = btn.innerHTML
+                btn.innerHTML = '✅ Copiado!'
+                setTimeout(() => { btn.innerHTML = original }, 2000)
+            })
+        }
+
+        // Inicializa
         window.onload = function() {
             initTailwind()
-            console.log('%c✅ Site Escolha & Pense carregado com sucesso! Divirta-se e pense bastante.', 'color:#22d3ee; font-family:monospace')
+            console.log('%c✅ Pensar Quiz carregado com 30 perguntas • Resultado surpresa no final • Divirta-se e pense bastante!', 'color:#22d3ee; font-size:13px; font-family:monospace')
             
-            // Easter egg: aperta "B" no teclado pra modo Bahia full
-            document.addEventListener('keydown', function(e) {
-                if (e.key.toLowerCase() === 'b') {
-                    alert('🌴 Modo Bahia ativado com sucesso! Agora todas as escolhas têm um toque de dendê e forró.')
+            // Easter egg: pressione "P" pra pular direto pro resultado (só pra teste)
+            document.addEventListener('keydown', (e) => {
+                if (e.key.toLowerCase() === 'p' && document.getElementById('quiz-screen').classList.contains('hidden') === false) {
+                    showResult()
                 }
             })
         }
