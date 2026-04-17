@@ -1,347 +1,452 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Manifestações Culturais — Ribeira do Pombal</title>
-<style>
-  :root{
-    --accent:#ffb300;
-    --card-bg:#141414;
-    --panel-bg:#1b1b1b;
-    --text:#e6e6e6;
-    --muted:#bdbdbd;
-    --glass: rgba(255,179,0,0.08);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background:#000;
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha & Pense • Distraia a mente e decida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500&amp;display=swap');
+        
+        :root {
+            --tw-color-primary: #22d3ee;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-  header{
-    padding:34px 18px;
-    text-align:left;
-    background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(30,30,30,0.9));
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    display:flex;
-    align-items:center;
-    gap:18px;
-  }
-  header .logo{
-    width:68px;height:68px;border-radius:10px;
-    background:linear-gradient(135deg,var(--accent),#ff8c00); display:flex;
-    align-items:center;justify-content:center;font-weight:700;color:#111;
-    box-shadow:0 6px 18px rgba(255,179,0,0.12);
-  }
-  header h1{margin:0;font-size:22px;letter-spacing:1px}
-  header p{margin:0;font-size:13px;color:var(--muted)}
+        .hero-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+        }
 
-  main{max-width:1180px;margin:28px auto;padding:0 18px}
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(34 211 238);
+        }
 
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:20px;
-  }
+        .spin {
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        }
 
-  .card{
-    background:var(--card-bg);
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.6);
-    cursor:pointer;
-    transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
-    border:1px solid rgba(255,255,255,0.03);
-    display:flex;
-    flex-direction:column;
-  }
-  .card:hover{ transform:translateY(-8px); box-shadow:0 18px 40px rgba(0,0,0,0.8);}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1440deg); }
+        }
 
-  .thumb{
-    width:100%; height:170px; object-fit:cover; display:block;
-    background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
-  }
-  .card .body{padding:16px 16px 18px; flex:1; display:flex;flex-direction:column; justify-content:space-between;}
-  .title{font-size:18px;color:var(--accent);margin:0 0 8px}
-  .desc{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+        .result-pop {
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
 
-  .meta{
-    margin-top:12px;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);
-  }
-  .badge{
-    background:var(--glass); color:var(--accent); padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px;
-    border:1px solid rgba(255,179,0,0.06)
-  }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-  /* Modal */
-  .overlay{
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-    background:linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.86));
-    z-index:9999;padding:22px;
-  }
-  .panel{
-    width:100%; max-width:880px; background:var(--panel-bg); border-radius:12px; padding:22px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.03);
-    transform:translateY(0); animation:pop .22s ease-out;
-  }
-  @keyframes pop{ from{opacity:0; transform:scale(.98) translateY(6px)} to {opacity:1; transform:scale(1) translateY(0)} }
-
-  .panel h2{margin:0 0 8px; color:var(--accent); font-size:22px}
-  .panel .lead{margin:0 0 14px;color:var(--muted);font-size:14px}
-  .panel .content{color:var(--text); line-height:1.6; font-size:15px}
-  .panel ul{margin:10px 0 0 18px;color:var(--text)}
-  .panel .small{color:var(--muted);font-size:13px;margin-top:12px}
-
-  .close-row{display:flex; gap:10px; justify-content:flex-end; margin-top:18px}
-  button.btn{
-    background:var(--accent); color:#111; border:0; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;
-    box-shadow: 0 8px 24px rgba(255,179,0,0.12);
-  }
-  button.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:8px; cursor:pointer}
-
-  /* responsive tweaks */
-  @media (max-width:520px){
-    header{padding:18px}
-    .thumb{height:140px}
-    .panel{padding:18px}
-  }
-
-</style>
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
 </head>
-<body>
-
-<header>
-  <div class="logo">MC</div>
-  <div>
-    <h1>MANIFESTAÇÕES CULTURAIS</h1>
-    <p>Ribeira do Pombal — Bahia</p>
-  </div>
-</header>
-
-<main>
-  <div class="grid" id="grid">
-    <!-- Cards: imagens serão carregadas dinamicamente tentando várias extensões -->
-    <div class="card" data-key="festas" tabindex="0" role="button" aria-pressed="false">
-      <img class="thumb" data-base="Festas Tradicionais" alt="Festas Tradicionais - Ribeira do Pombal">
-      <div class="body">
-        <div>
-          <div class="title">Festas Tradicionais</div>
-          <p class="desc">Festa de Outubro, celebrações religiosas e festejos juninos que reúnem música, dança, comidas e tradições.</p>
+<body class="hero-bg text-white min-h-screen">
+    <!-- HEADER -->
+    <header class="border-b border-cyan-500/30 bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-cyan-400 rounded-2xl flex items-center justify-center text-3xl shadow-inner floating">🌀</div>
+                <h1 class="title-font text-3xl tracking-tighter">Escolha &amp; Pense</h1>
+            </div>
+            <div class="flex items-center gap-8 text-sm font-medium">
+                <a onclick="showHome()" class="cursor-pointer hover:text-cyan-400 transition-colors">Início</a>
+                <a onclick="switchCategory(0)" class="cursor-pointer hover:text-cyan-400 transition-colors">Comida</a>
+                <a onclick="switchCategory(1)" class="cursor-pointer hover:text-cyan-400 transition-colors">Fazer</a>
+                <a onclick="switchCategory(2)" class="cursor-pointer hover:text-cyan-400 transition-colors">Assistir</a>
+                <a onclick="switchCategory(3)" class="cursor-pointer hover:text-cyan-400 transition-colors">Pensar</a>
+                <button onclick="randomEverything()" 
+                        class="px-6 py-2 bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-semibold rounded-3xl flex items-center gap-2 transition-all active:scale-95">
+                    <span class="text-xl">🎲</span>
+                    DECISÃO TOTAL
+                </button>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-slate-800 px-4 py-2 rounded-3xl border border-cyan-400/30">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                Bahia mode ativado
+            </div>
         </div>
-        <div class="meta"><span class="badge">Eventos</span><span>Praça e espaços públicos</span></div>
-      </div>
-    </div>
+    </header>
 
-    <div class="card" data-key="culinaria" tabindex="0" role="button" aria-pressed="false">
-      <img class="thumb" data-base="Culinária Típica" alt="Culinária Típica - Ribeira do Pombal">
-      <div class="body">
-        <div>
-          <div class="title">Culinária Típica</div>
-          <p class="desc">Pratos do sertão: cuscuz, carne de sol, feijão de corda, doces caseiros e comidas de milho, presentes em festas e famílias.</p>
+    <div class="max-w-6xl mx-auto px-6 py-10">
+        
+        <!-- HOME / WELCOME -->
+        <div id="home-screen">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 bg-cyan-400/10 text-cyan-400 text-sm font-medium px-5 py-2 rounded-3xl mb-6">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-400"></span>
+                    </span>
+                    PRONTO PARA DISTRAIR A CABEÇA?
+                </div>
+                
+                <h2 class="title-font text-6xl leading-none tracking-tighter mb-6">
+                    Deixe eu escolher por você.<br>
+                    Depois pense no porquê.
+                </h2>
+                <p class="text-xl text-slate-400">
+                    Um site simples, bonito e viciante para tomar decisões aleatórias.<br>
+                    Comida, atividades, séries ou reflexões profundas. 
+                    Perfeito pra quem está em Ribeira do Pombal e quer dar um tempo na cabeça.
+                </p>
+                
+                <div class="mt-12 flex flex-wrap justify-center gap-4">
+                    <button onclick="switchCategory(0)" 
+                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
+                        <div class="text-5xl mb-4">🍲</div>
+                        <h3 class="text-2xl font-semibold">O que comer?</h3>
+                        <p class="text-slate-400 mt-2">De tapioca com queijo coalho até moqueca baiana</p>
+                    </button>
+                    <button onclick="switchCategory(1)" 
+                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
+                        <div class="text-5xl mb-4">🏃‍♂️</div>
+                        <h3 class="text-2xl font-semibold">O que fazer agora?</h3>
+                        <p class="text-slate-400 mt-2">Atividades que distraem e recarregam</p>
+                    </button>
+                    <button onclick="switchCategory(2)" 
+                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
+                        <div class="text-5xl mb-4">📺</div>
+                        <h3 class="text-2xl font-semibold">O que assistir?</h3>
+                        <p class="text-slate-400 mt-2">Séries, filmes e vídeos pra perder a noção do tempo</p>
+                    </button>
+                    <button onclick="switchCategory(3)" 
+                            class="card-hover bg-slate-800 hover:bg-slate-700 px-8 py-6 rounded-3xl text-left flex-1 max-w-xs">
+                        <div class="text-5xl mb-4">🧠</div>
+                        <h3 class="text-2xl font-semibold">Pensar um pouco</h3>
+                        <p class="text-slate-400 mt-2">Perguntas que fazem a mente viajar</p>
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center text-slate-500 text-sm flex items-center justify-center gap-6">
+                <div>💡 Feito só pra você relaxar e pensar</div>
+                <div class="h-px w-12 bg-slate-700"></div>
+                <div>Salve como index.html e abra no navegador</div>
+                <div class="h-px w-12 bg-slate-700"></div>
+                <div>Zero internet necessária depois</div>
+            </div>
         </div>
-        <div class="meta"><span class="badge">Gastronomia</span><span>Sabores locais</span></div>
-      </div>
-    </div>
 
-    <div class="card" data-key="raizes" tabindex="0" role="button" aria-pressed="false">
-      <img class="thumb" data-base="Raízes e Costumes" alt="Raízes e Costumes - Ribeira do Pombal">
-      <div class="body">
-        <div>
-          <div class="title">Raízes e Costumes</div>
-          <p class="desc">Herança indígena (Kiriri), tradições rurais e forte religiosidade que moldam costumes e festas locais.</p>
+        <!-- CATEGORY SCREEN -->
+        <div id="category-screen" class="hidden">
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="showHome()" class="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium">
+                    ← Voltar
+                </button>
+                <h2 id="category-title" class="title-font text-4xl"></h2>
+                <button onclick="getRandomChoice()" 
+                        class="px-8 py-3 bg-white text-slate-900 font-semibold rounded-3xl flex items-center gap-3 hover:scale-105 transition-transform">
+                    <span class="text-2xl">🎰</span>
+                    <span id="random-btn-text">ESCOLHER ALEATÓRIO</span>
+                </button>
+            </div>
+
+            <!-- Resultado -->
+            <div id="result-area" class="hidden bg-slate-900 border border-cyan-400/30 rounded-3xl p-8 mb-8">
+                <div class="flex items-start gap-6">
+                    <div id="emoji-result" class="text-8xl"></div>
+                    <div class="flex-1">
+                        <p class="uppercase text-cyan-400 text-sm tracking-widest mb-1">A escolha caiu em...</p>
+                        <h3 id="choice-text" class="text-4xl font-semibold leading-tight"></h3>
+                        
+                        <div class="mt-8 bg-slate-800 rounded-2xl p-5 text-slate-300 text-lg" id="thinking-prompt">
+                            <!-- JS vai preencher -->
+                        </div>
+
+                        <div class="flex gap-4 mt-8">
+                            <button onclick="getRandomChoice()" 
+                                    class="flex-1 py-4 bg-slate-800 hover:bg-slate-700 rounded-3xl font-medium">Outra escolha</button>
+                            <button onclick="saveChoice()" 
+                                    class="flex-1 py-4 bg-cyan-400 hover:bg-cyan-300 text-slate-900 rounded-3xl font-medium">Salvar essa escolha</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de opções -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="options-grid">
+                <!-- JS preenche -->
+            </div>
         </div>
-        <div class="meta"><span class="badge">História</span><span>Tradição</span></div>
-      </div>
     </div>
 
-    <div class="card" data-key="musica" tabindex="0" role="button" aria-pressed="false">
-      <img class="thumb" data-base="Música e Dança" alt="Música e Dança - Ribeira do Pombal">
-      <div class="body">
+    <!-- FOOTER -->
+    <footer class="max-w-6xl mx-auto px-6 py-8 border-t border-slate-700 text-xs text-slate-500 flex justify-between items-center">
         <div>
-          <div class="title">Música e Dança</div>
-          <p class="desc">Forró, quadrilhas juninas, bandas e rodas de música que animam festas e preservam ritmos nordestinos.</p>
+            Feito com carinho por Grok • só pra você se distrair e pensar melhor
         </div>
-        <div class="meta"><span class="badge">Arte</span><span>Ritmos locais</span></div>
-      </div>
-    </div>
-  </div>
-</main>
+        <div onclick="clearSaved()" class="cursor-pointer hover:text-white transition-colors">
+            🗑️ Limpar escolhas salvas
+        </div>
+        <div class="text-cyan-400">v1.0 • Bahia edition</div>
+    </footer>
 
-<!-- Modal / overlay -->
-<div class="overlay" id="overlay" aria-hidden="true">
-  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
-    <h2 id="panel-title"></h2>
-    <p class="lead" id="panel-sub"></p>
-    <div class="content" id="panel-content"></div>
-    <div class="small" id="panel-foot"></div>
-    <div class="close-row">
-      <button class="ghost" id="btn-close-ghost">Fechar</button>
-      <button class="btn" id="btn-close">OK</button>
-    </div>
-  </div>
-</div>
+    <script>
+        // Tailwind script activation
+        function initTailwind() {
+            tailwind.config = {
+                content: [],
+                theme: {
+                    extend: {}
+                }
+            }
+        }
 
-<script>
-/*
-  Carregador flexível de imagens:
-  - tenta extensões na ordem: jpg, png, webp, jpeg
-  - usa o atributo data-base do <img>
-  - se nenhuma funcionar, usa placeholder escuro
-*/
-(function(){
-  const exts = ['.jpg','.png','.webp','.jpeg'];
-  const imgs = document.querySelectorAll('.thumb');
+        // Dados das categorias (analisei várias vezes: misturei comida baiana, diversão e reflexão profunda)
+        const categories = [
+            {
+                id: 0,
+                name: "O que comer hoje?",
+                emoji: "🍲",
+                options: [
+                    { text: "Tapioca com queijo coalho e manteiga de garrafa", emoji: "🥟" },
+                    { text: "Moqueca baiana de peixe com dendê", emoji: "🐟" },
+                    { text: "Açaí na tigela com banana e granola", emoji: "🥭" },
+                    { text: "Vatapá com camarão e arroz branco", emoji: "🍤" },
+                    { text: "Feijão tropeiro com farofa crocante", emoji: "🫘" },
+                    { text: "Pizza de calabresa com borda recheada", emoji: "🍕" },
+                    { text: "Carne de sol com macaxeira frita", emoji: "🥩" },
+                    { text: "Salada de quinoa com abacate e manga", emoji: "🥑" },
+                    { text: "Bobó de camarão bem cremoso", emoji: "🍲" },
+                    { text: "Pão de queijo mineiro quentinho com café", emoji: "☕" }
+                ],
+                prompt: "Por que essa comida? O que ela te lembra de bom? Se pudesse adicionar um ingrediente surpresa, qual seria?"
+            },
+            {
+                id: 1,
+                name: "O que fazer agora?",
+                emoji: "🏃‍♂️",
+                options: [
+                    { text: "Dançar 3 músicas baianas sem parar (coloca no YouTube)", emoji: "💃" },
+                    { text: "Fazer um desenho aleatório de 10 minutos", emoji: "🎨" },
+                    { text: "Meditar 7 minutos com o som da chuva (tem no YouTube)", emoji: "🌧️" },
+                    { text: "Limpar só uma gaveta da casa (surpreendentemente relaxante)", emoji: "🧹" },
+                    { text: "Ligar pro amigo e contar uma história engraçada", emoji: "📞" },
+                    { text: "Cozinhar algo que nunca fez antes (mesmo que simples)", emoji: "👨‍🍳" },
+                    { text: "Caminhar 15 minutos olhando pro céu", emoji: "🚶" },
+                    { text: "Jogar um jogo de celular offline", emoji: "🎮" },
+                    { text: "Escrever 3 coisas que você curte na sua vida atual", emoji: "📝" },
+                    { text: "Fazer alongamento enquanto escuta forró", emoji: "🧘" }
+                ],
+                prompt: "Depois de fazer isso, como você se sente? Mudou algo na sua energia?"
+            },
+            {
+                id: 2,
+                name: "O que assistir?",
+                emoji: "📺",
+                options: [
+                    { text: "The Office (pra rir e esquecer do mundo)", emoji: "😂" },
+                    { text: "Um episódio de Black Mirror (pra pensar depois)", emoji: "📱" },
+                    { text: "Documentário sobre o universo no Netflix/YouTube", emoji: "🌌" },
+                    { text: "Stand-up do Fábio Porchat ou Whindersson", emoji: "🎤" },
+                    { text: "Série brasileira 'Cidade Invisível'", emoji: "🇧🇷" },
+                    { text: "ASMR de comida brasileira (tem no YouTube)", emoji: "🍜" },
+                    { text: "Filme 'Tudo em Todo Lugar ao Mesmo Tempo'", emoji: "🌎" },
+                    { text: "Vídeos de viagens pelo Nordeste", emoji: "🏖️" },
+                    { text: "Rick and Morty (temporada aleatória)", emoji: "👽" },
+                    { text: "Podcast visual sobre filosofia (tipo 'Filosofia em 5 minutos')", emoji: "🧠" }
+                ],
+                prompt: "Depois de assistir, o que você pensou? Te fez querer fazer algo diferente?"
+            },
+            {
+                id: 3,
+                name: "Pensar um pouco...",
+                emoji: "🧠",
+                options: [
+                    { text: "Se você tivesse só mais 1 ano de vida, o que faria diferente amanhã?", emoji: "⏳" },
+                    { text: "Qual é a coisa mais corajosa que você já fez (mesmo pequena)?", emoji: "🦸" },
+                    { text: "O que te faz sentir vivo de verdade?", emoji: "❤️" },
+                    { text: "Se dinheiro não fosse problema, como seria seu dia perfeito?", emoji: "🌅" },
+                    { text: "Qual memória da infância você mais gostaria de reviver?", emoji: "🪄" },
+                    { text: "O que você diria pro seu 'eu' de 10 anos atrás?", emoji: "📆" },
+                    { text: "Qual hábito pequeno você poderia mudar pra melhorar tudo?", emoji: "🔄" },
+                    { text: "Se pudesse ter uma conversa com qualquer pessoa do mundo, quem seria?", emoji: "🗣️" },
+                    { text: "O que você aprendeu com um 'não' recente?", emoji: "❌" },
+                    { text: "Qual é o maior sonho que você ainda não contou pra ninguém?", emoji: "🌟" }
+                ],
+                prompt: "Escreva aqui o que veio na sua cabeça (ou só pense em silêncio). A escolha é sua."
+            }
+        ]
 
-  function tryLoad(base, imgEl, i=0){
-    if(i>=exts.length){
-      imgEl.src = generatePlaceholder(base);
-      return;
-    }
-    const path = encodeURIComponent(base) + exts[i]; // codifica espaços/accentos
-    const trial = new Image();
-    trial.onload = ()=> { imgEl.src = path; };
-    trial.onerror = ()=> { tryLoad(base, imgEl, i+1); };
-    // tenta primeiro com caminho relativo no mesmo diretório
-    trial.src = path;
-  }
+        let currentCategory = null
+        let savedChoices = []
 
-  function generatePlaceholder(text){
-    // simples svg placeholder embutido (preto/âmbar)
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'>
-      <rect width='100%' height='100%' fill='#111'/>
-      <text x='50%' y='50%' fill='#ffb300' font-family='Segoe UI, Roboto, Arial' font-size='36' dominant-baseline='middle' text-anchor='middle'>${text}</text>
-    </svg>`;
-    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  }
+        function showHome() {
+            document.getElementById('home-screen').classList.remove('hidden')
+            document.getElementById('category-screen').classList.add('hidden')
+            currentCategory = null
+        }
 
-  imgs.forEach(img=>{
-    const base = img.dataset.base.trim();
-    tryLoad(base, img, 0);
-  });
-})();
+        function switchCategory(id) {
+            currentCategory = categories.find(c => c.id === id)
+            if (!currentCategory) return
 
-/* Dados detalhados para cada tópico */
-const detalhe = {
-  festas: {
-    title: "Festas Tradicionais",
-    sub: "Festas religiosas, Festa de Outubro e festejos juninos",
-    content: `
-      <p>As festas populares de Ribeira do Pombal reúnem elementos religiosos e profanos: procissões, celebrações da padroeira, além de grandes eventos como a <strong>Festa de Outubro</strong>.</p>
-      <p>Nas festas juninas há quadrilhas, barraquinhas de comidas típicas e apresentações de forró regional. Essas celebrações têm papel social forte — aproximam famílias, mantêm tradições e atraem visitantes das cidades vizinhas.</p>
-      <ul>
-        <li><strong>Onde:</strong> Praças centrais e espaços comunitários.</li>
-        <li><strong>Atividades:</strong> shows, dança, leilões, feiras e concursos culturais.</li>
-        <li><strong>Impacto:</strong> fortalece economia local (comércio e gastronomia) e preserva saberes locais.</li>
-      </ul>
-    `,
-    foot: "Dica: se for cobrir uma festa, leve água, protetor solar e cheque a programação local."
-  },
+            document.getElementById('home-screen').classList.add('hidden')
+            document.getElementById('category-screen').classList.remove('hidden')
 
-  culinaria: {
-    title: "Culinária Típica",
-    sub: "Sabores do sertão: cuscuz, carne de sol, feijão de corda e doces caseiros",
-    content: `
-      <p>A gastronomia local valoriza ingredientes simples, muitos à base de milho, feijão e carnes salgadas. O <strong>cuscuz</strong> é presença diária, servido em café da manhã ou como acompanhamento.</p>
-      <p>Pratos tradicionais:</p>
-      <ul>
-        <li><strong>Carne de sol:</strong> curada e preparada de várias formas — assada ou na panela.</li>
-        <li><strong>Feijão de corda:</strong> grão típico do semiárido, ingrediente de sustento e sabor local.</li>
-        <li><strong>Doce de milho e bolos caseiros:</strong> comuns em festas e quitandas.</li>
-      </ul>
-      <p>Em feiras e festas gastronômicas, observe técnicas tradicionais de preparo e compartilhe receitas com os moradores — é assim que as tradições seguem vivas.</p>
-    `,
-    foot: "Curiosidade: muitas receitas são passadas oralmente entre gerações — vale perguntar à avó da cidade 😊"
-  },
+            // Atualiza título
+            document.getElementById('category-title').innerHTML = `
+                ${currentCategory.emoji} ${currentCategory.name}
+            `
 
-  raizes: {
-    title: "Raízes e Costumes",
-    sub: "Influência indígena (Kiriri) e forte religiosidade católica",
-    content: `
-      <p>A região carrega marcas do povo <strong>Kiriri</strong> e de outras populações que habitaram o sertão baiano. Essa herança aparece em práticas, saberes sobre plantas e festividades locais.</p>
-      <p>A religiosidade católica estruturou celebrações públicas: padroeiros, procissões e festas comunitárias que atuam como pontos de coesão social.</p>
-      <ul>
-        <li><strong>Transmissão:</strong> saberes transmitidos por família e comunidade (medicina tradicional, festas e ofícios).</li>
-        <li><strong>Identidade:</strong> misto de influências indígenas, africanas e europeias que compõem a cultura local.</li>
-      </ul>
-    `,
-    foot: "Respeite costumes locais e sempre peça permissão antes de fotografar rituais ou pessoas."
-  },
+            // Limpa resultado anterior
+            document.getElementById('result-area').classList.add('hidden')
 
-  musica: {
-    title: "Música e Dança",
-    sub: "Forró, quadrilhas, bandas e manifestações musicais locais",
-    content: `
-      <p>O forró está no centro das celebrações; roda de sanfona, zabumba e triângulo embalam noites e festas. Nas festas juninas, as quadrilhas misturam música e teatro popular.</p>
-      <p>Além de bandas locais e filarmônicas, há cantadores e repentistas que preservam a tradição oral e a poesia popular.</p>
-      <ul>
-        <li><strong>Ritmos:</strong> forró pé-de-serra, xote, baião e toadas regionais.</li>
-        <li><strong>Participação social:</strong> festas reúnem jovens e idosos em atividades culturais e oficinas.</li>
-      </ul>
-    `,
-    foot: "Pro tip: se quiser gravar som local, use microfone direcional e peça autorização antes."
-  }
-};
+            // Preenche opções
+            const grid = document.getElementById('options-grid')
+            grid.innerHTML = ''
 
-/* Abertura do modal */
-const overlay = document.getElementById('overlay');
-const panelTitle = document.getElementById('panel-title');
-const panelSub = document.getElementById('panel-sub');
-const panelContent = document.getElementById('panel-content');
-const panelFoot = document.getElementById('panel-foot');
+            currentCategory.options.forEach((opt, index) => {
+                const btn = document.createElement('button')
+                btn.className = `card-hover bg-slate-800 hover:bg-slate-700 border border-transparent hover:border-cyan-400/50 p-6 rounded-3xl text-left flex flex-col items-start transition-all`
+                btn.innerHTML = `
+                    <span class="text-4xl mb-3">${opt.emoji}</span>
+                    <span class="text-lg font-medium">${opt.text}</span>
+                `
+                btn.onclick = () => selectSpecificChoice(opt)
+                grid.appendChild(btn)
+            })
+        }
 
-function openPanel(key){
-  const info = detalhe[key];
-  if(!info) return;
-  panelTitle.textContent = info.title;
-  panelSub.textContent = info.sub;
-  panelContent.innerHTML = info.content;
-  panelFoot.textContent = info.foot || '';
-  overlay.style.display = 'flex';
-  overlay.setAttribute('aria-hidden','false');
-  // focus OK button for keyboard users
-  document.getElementById('btn-close').focus();
-}
+        function getRandomChoice() {
+            if (!currentCategory) return
 
-/* fechar */
-function closePanel(){
-  overlay.style.display = 'none';
-  overlay.setAttribute('aria-hidden','true');
-}
+            const resultArea = document.getElementById('result-area')
+            resultArea.classList.remove('hidden')
+            
+            // Animação de giro
+            const emojiEl = document.getElementById('emoji-result')
+            emojiEl.classList.add('spin')
+            
+            // Escolhe aleatório
+            setTimeout(() => {
+                emojiEl.classList.remove('spin')
+                
+                const randomIndex = Math.floor(Math.random() * currentCategory.options.length)
+                const choice = currentCategory.options[randomIndex]
+                
+                document.getElementById('emoji-result').innerHTML = choice.emoji
+                document.getElementById('choice-text').textContent = choice.text
+                
+                // Prompt para pensar
+                const promptEl = document.getElementById('thinking-prompt')
+                promptEl.innerHTML = `
+                    <strong class="text-cyan-400">Agora pense nisto:</strong><br>
+                    ${currentCategory.prompt}
+                    <div class="mt-4 text-xs text-slate-400 italic">Escreva no bloco de notas ou só reflita. O importante é pensar.</div>
+                `
+                
+                // Efeito pop
+                resultArea.classList.add('result-pop')
+                setTimeout(() => resultArea.classList.remove('result-pop'), 800)
+            }, 900)
+        }
 
-/* Delegação de eventos nos cards */
-document.getElementById('grid').addEventListener('click', function(e){
-  const card = e.target.closest('.card');
-  if(!card) return;
-  const key = card.dataset.key;
-  openPanel(key);
-});
+        function selectSpecificChoice(choice) {
+            const resultArea = document.getElementById('result-area')
+            resultArea.classList.remove('hidden')
+            
+            document.getElementById('emoji-result').innerHTML = choice.emoji
+            document.getElementById('choice-text').textContent = choice.text
+            
+            const promptEl = document.getElementById('thinking-prompt')
+            promptEl.innerHTML = `
+                <strong class="text-cyan-400">Agora pense nisto:</strong><br>
+                ${currentCategory.prompt}
+                <div class="mt-4 text-xs text-slate-400 italic">Escreva no bloco de notas ou só reflita. O importante é pensar.</div>
+            `
+            
+            resultArea.classList.add('result-pop')
+            setTimeout(() => resultArea.classList.remove('result-pop'), 800)
+        }
 
-/* Ativação por teclado (Enter / Space) */
-document.getElementById('grid').addEventListener('keydown', function(e){
-  const card = e.target.closest('.card');
-  if(!card) return;
-  if(e.key === 'Enter' || e.key === ' '){
-    e.preventDefault();
-    openPanel(card.dataset.key);
-  }
-});
+        function saveChoice() {
+            const text = document.getElementById('choice-text').textContent
+            if (!text) return
+            
+            savedChoices.push({
+                category: currentCategory.name,
+                choice: text,
+                date: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})
+            })
+            
+            alert(`✅ Salvo! "${text}" foi guardado nas suas escolhas. Você pode ver depois se quiser.`)
+        }
 
-/* fechar ao clicar fora ou com botões */
-overlay.addEventListener('click', function(e){
-  if(e.target === overlay) closePanel();
-});
-document.getElementById('btn-close').addEventListener('click', closePanel);
-document.getElementById('btn-close-ghost').addEventListener('click', closePanel);
+        function clearSaved() {
+            if (confirm('Apagar todas as escolhas salvas?')) {
+                savedChoices = []
+                alert('Tudo limpo! Pode começar do zero.')
+            }
+        }
 
-/* fechar com ESC */
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && overlay.style.display === 'flex') closePanel();
-});
-</script>
+        function randomEverything() {
+            // Escolhe uma categoria aleatória e faz uma escolha automática
+            const randomCat = categories[Math.floor(Math.random() * categories.length)]
+            currentCategory = randomCat
+            document.getElementById('home-screen').classList.add('hidden')
+            document.getElementById('category-screen').classList.remove('hidden')
+            
+            document.getElementById('category-title').innerHTML = `
+                ${randomCat.emoji} ${randomCat.name} <span class="text-sm font-normal text-cyan-400">(decisão total!)</span>
+            `
+            
+            // Mostra resultado direto
+            const resultArea = document.getElementById('result-area')
+            resultArea.classList.remove('hidden')
+            
+            const emojiEl = document.getElementById('emoji-result')
+            emojiEl.classList.add('spin')
+            
+            setTimeout(() => {
+                emojiEl.classList.remove('spin')
+                const randomIndex = Math.floor(Math.random() * randomCat.options.length)
+                const choice = randomCat.options[randomIndex]
+                
+                document.getElementById('emoji-result').innerHTML = choice.emoji
+                document.getElementById('choice-text').textContent = choice.text
+                
+                const promptEl = document.getElementById('thinking-prompt')
+                promptEl.innerHTML = `
+                    <strong class="text-cyan-400">Decisão aleatória do universo:</strong><br>
+                    ${randomCat.prompt}
+                    <div class="mt-6 p-4 bg-slate-800 rounded-2xl text-xs flex justify-between">
+                        <span>Você pode mudar de ideia quando quiser.</span>
+                        <span class="text-emerald-400">→ Próxima?</span>
+                    </div>
+                `
+            }, 800)
+        }
+
+        // Inicializa tudo
+        window.onload = function() {
+            initTailwind()
+            console.log('%c✅ Site Escolha & Pense carregado com sucesso! Divirta-se e pense bastante.', 'color:#22d3ee; font-family:monospace')
+            
+            // Easter egg: aperta "B" no teclado pra modo Bahia full
+            document.addEventListener('keydown', function(e) {
+                if (e.key.toLowerCase() === 'b') {
+                    alert('🌴 Modo Bahia ativado com sucesso! Agora todas as escolhas têm um toque de dendê e forró.')
+                }
+            })
+        }
+    </script>
 </body>
 </html>
