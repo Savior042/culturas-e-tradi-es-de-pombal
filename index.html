@@ -1,739 +1,241 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Uma experiência digital única.">
-    <title>AURORA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap');
-        
-        :root {
-            --tw-color-primary: #a855f7;
-        }
-        
-        * {
-            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
-        }
-        
-        .tailwind-ready * {
-            transition-duration: 0ms;
-        }
-        
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-        
-        .heading-font {
-            font-family: 'Playfair Display', sans-serif;
-        }
-        
-        .hero-bg {
-            background: radial-gradient(circle at center, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
-        }
-        
-        .nav-link {
-            position: relative;
-        }
-        
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: #a855f7;
-        }
-        
-        .nav-link:hover:after {
-            width: 100%;
-        }
-        
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 25px 50px -12px rgb(168 85 247);
-        }
-        
-        .modal {
-            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes modalPop {
-            0% { transform: scale(0.95); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .aurora-text {
-            animation: auroraGlow 4s ease-in-out infinite alternate;
-        }
-    </style>
-</head>
-<body class="bg-[#0a0a0a] text-white overflow-x-hidden">
-    <!-- Canvas de partículas (efeito aurora premium) -->
-    <canvas id="canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Uma experiência interativa em HTML para espantar o tédio com design cósmico, efeitos satisfatórios e pequenas surpresas."
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Estação Anti-Tédio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&family=Syne:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <canvas class="space-canvas" aria-hidden="true"></canvas>
+      <div class="noise-layer" aria-hidden="true"></div>
+      <div class="cursor-glow" aria-hidden="true"></div>
+      <div class="floating-particles" aria-hidden="true"></div>
 
-    <!-- Navbar -->
-    <nav class="relative z-50 border-b border-white/10 bg-black/70 backdrop-blur-lg">
-        <div class="max-w-screen-2xl mx-auto px-8 py-6 flex items-center justify-between">
-            <!-- Logo -->
-            <div class="flex items-center gap-x-3">
-                <div class="w-9 h-9 bg-gradient-to-br from-purple-500 to-violet-400 rounded-2xl flex items-center justify-center text-2xl shadow-inner">✺</div>
-                <h1 class="heading-font text-3xl tracking-[-2px] font-bold">AURORA</h1>
+      <header class="site-header">
+        <a class="brand" href="#top">
+          <span class="brand-mark"></span>
+          <span class="brand-text">Estação Anti-Tédio</span>
+        </a>
+        <nav class="top-nav" aria-label="Navegação principal">
+          <a href="#experiencia">Experiência</a>
+          <a href="#painel">Painel</a>
+          <a href="#gatilhos">Gatilhos</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero section-reveal">
+          <div class="hero-copy">
+            <p class="eyebrow">portal recreativo para cérebros inquietos</p>
+            <h1>Uma sala cósmica para clicar, olhar, brincar e sair menos entediado.</h1>
+            <p class="hero-text">
+              Esta página mistura arte digital, pequenos desafios e efeitos
+              visuais hipnóticos. É o tipo de site que existe só porque é
+              divertido existir.
+            </p>
+
+            <div class="hero-actions">
+              <button class="primary-button magnetic" id="surpriseButton" type="button">
+                Me surpreenda
+              </button>
+              <button class="ghost-button magnetic" id="pulseButton" type="button">
+                Ativar modo hipnótico
+              </button>
             </div>
 
-            <!-- Menu Desktop -->
-            <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
-                <a href="#inicio" onclick="smoothScrollTo('inicio')" class="nav-link uppercase tracking-widest text-white/90 hover:text-white">Início</a>
-                <a href="#luz" onclick="smoothScrollTo('luz')" class="nav-link uppercase tracking-widest text-white/90 hover:text-white">A Luz</a>
-                <a href="#jornada" onclick="smoothScrollTo('jornada')" class="nav-link uppercase tracking-widest text-white/90 hover:text-white">Jornada</a>
-                <a href="#galeria" onclick="smoothScrollTo('galeria')" class="nav-link uppercase tracking-widest text-white/90 hover:text-white">Galeria</a>
-                <a href="#conectar" onclick="smoothScrollTo('conectar')" class="nav-link uppercase tracking-widest text-white/90 hover:text-white">Conectar</a>
+            <div class="hero-status">
+              <div class="status-pill">
+                <span class="status-label">clima</span>
+                <strong id="statusVibe">curiosidade luminosa</strong>
+              </div>
+              <div class="status-pill">
+                <span class="status-label">energia</span>
+                <strong id="statusEnergy">87%</strong>
+              </div>
+              <div class="status-pill">
+                <span class="status-label">ritmo</span>
+                <strong id="statusTempo">suave e cintilante</strong>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel-card spectrum-card tilt-card">
+              <p class="panel-kicker">momento do dia</p>
+              <h2 id="momentTitle">Nebulosa de Intervalo</h2>
+              <p id="momentDescription">
+                Aperte o botão principal e a estação sorteia uma cena, um micro
+                desafio e uma nova cor para o ambiente.
+              </p>
+
+              <div class="orbital-ring" aria-hidden="true">
+                <div class="orbital-core"></div>
+                <span class="orbital-dot orbital-dot-a"></span>
+                <span class="orbital-dot orbital-dot-b"></span>
+                <span class="orbital-dot orbital-dot-c"></span>
+              </div>
             </div>
 
-            <!-- Ações -->
-            <div class="flex items-center gap-x-4">
-                <button onclick="toggleTheme()" 
-                        class="px-6 py-3 text-sm font-medium border border-white/30 hover:border-purple-400 rounded-3xl flex items-center gap-x-2">
-                    <span id="theme-icon">☀️</span>
-                </button>
-                
-                <button onclick="openModal()"
-                        class="px-8 py-3.5 bg-white text-black font-semibold rounded-3xl hover:bg-purple-300 hover:text-white flex items-center gap-x-2 text-sm uppercase tracking-widest">
-                    <span>Entrar na Experiência</span>
-                    <span class="text-xl leading-none">→</span>
-                </button>
+            <div class="panel-card notes-card tilt-card">
+              <p class="panel-kicker">sussurros úteis</p>
+              <ul class="micro-list">
+                <li>passe o mouse e veja a luz reagir</li>
+                <li>role a página devagar para liberar camadas</li>
+                <li>clique sem objetivo, só porque sim</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
 
-                <!-- Mobile Hamburger -->
-                <button onclick="toggleMobileMenu()" class="md:hidden w-11 h-11 flex items-center justify-center text-3xl">
-                    <span id="hamburger">☰</span>
-                </button>
-            </div>
-        </div>
+        <section class="marquee-strip" aria-label="Faixa decorativa">
+          <div class="marquee-track">
+            <span>brilho líquido</span>
+            <span>micro-missões</span>
+            <span>botões deliciosos</span>
+            <span>paralaxe suave</span>
+            <span>estranheza elegante</span>
+            <span>tempo mais interessante</span>
+            <span aria-hidden="true">brilho líquido</span>
+            <span aria-hidden="true">micro-missões</span>
+            <span aria-hidden="true">botões deliciosos</span>
+            <span aria-hidden="true">paralaxe suave</span>
+            <span aria-hidden="true">estranheza elegante</span>
+            <span aria-hidden="true">tempo mais interessante</span>
+          </div>
+        </section>
 
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-black/95 backdrop-blur-lg px-8 py-6">
-            <div class="flex flex-col gap-y-6 text-lg">
-                <a href="#inicio" onclick="smoothScrollTo('inicio');toggleMobileMenu()" class="py-2">Início</a>
-                <a href="#luz" onclick="smoothScrollTo('luz');toggleMobileMenu()" class="py-2">A Luz</a>
-                <a href="#jornada" onclick="smoothScrollTo('jornada');toggleMobileMenu()" class="py-2">Jornada</a>
-                <a href="#galeria" onclick="smoothScrollTo('galeria');toggleMobileMenu()" class="py-2">Galeria</a>
-                <a href="#conectar" onclick="smoothScrollTo('conectar');toggleMobileMenu()" class="py-2">Conectar</a>
-                <div class="pt-6 border-t border-white/10">
-                    <button onclick="openModal();toggleMobileMenu()" 
-                            class="w-full py-5 bg-gradient-to-r from-purple-500 to-violet-400 rounded-3xl text-lg font-semibold">
-                        Entrar na Experiência
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+        <section class="feature-grid section-reveal" id="experiencia">
+          <article class="feature-card tilt-card">
+            <p class="card-index">01</p>
+            <h3>Design que parece vivo</h3>
+            <p>
+              Fundo em movimento, superfícies translúcidas, brilhos pulsantes e
+              profundidade para dar aquela sensação de interface preciosa.
+            </p>
+          </article>
 
-    <!-- HERO SECTION -->
-    <section id="inicio" class="relative min-h-screen flex items-center hero-bg z-10">
-        <div class="max-w-screen-2xl mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-8">
-                <div class="inline-flex items-center gap-x-2 px-6 py-2 rounded-3xl border border-purple-400/30 bg-white/5 text-purple-300 text-sm font-medium">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    EXPERIÊNCIA AO VIVO
-                </div>
-                
-                <h1 class="heading-font text-7xl md:text-8xl leading-[1.05] font-bold tracking-[-4px] aurora-text">
-                    A luz que<br>você sempre<br>procurou.
-                </h1>
-                
-                <p class="text-2xl text-white/70 max-w-lg">
-                    Uma jornada sensorial onde cada pixel dança com você. 
-                    Sem explicações. Apenas sensação.
-                </p>
-                
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="startExperience()" 
-                            class="px-10 py-6 text-xl font-semibold bg-gradient-to-r from-purple-500 to-violet-500 rounded-3xl hover:shadow-2xl hover:shadow-purple-500/50 flex items-center gap-x-4">
-                        COMEÇAR AGORA
-                        <span class="text-3xl">✺</span>
-                    </button>
-                    
-                    <button onclick="smoothScrollTo('luz')" 
-                            class="px-10 py-6 text-xl font-medium border-2 border-white/60 hover:border-white rounded-3xl flex items-center gap-x-3">
-                        VER A MAGIA
-                    </button>
-                </div>
-                
-                <div class="flex items-center gap-x-8 text-sm pt-6">
-                    <div class="flex -space-x-4">
-                        <div class="w-8 h-8 bg-purple-300 rounded-2xl ring-2 ring-black flex items-center justify-center text-xs">🌌</div>
-                        <div class="w-8 h-8 bg-violet-300 rounded-2xl ring-2 ring-black flex items-center justify-center text-xs">🌠</div>
-                        <div class="w-8 h-8 bg-pink-300 rounded-2xl ring-2 ring-black flex items-center justify-center text-xs">✨</div>
-                    </div>
-                    <p class="text-white/60">Mais de 124.872 almas já entraram na luz</p>
-                </div>
-            </div>
-            
-            <!-- Visual hero direito -->
-            <div class="hidden md:flex justify-end relative">
-                <div class="relative">
-                    <div class="w-96 h-96 bg-gradient-to-br from-purple-400/20 to-transparent rounded-[4rem] rotate-12 flex items-center justify-center">
-                        <div class="w-80 h-80 bg-black/40 backdrop-blur-3xl rounded-3xl border border-white/10 flex items-center justify-center text-[180px] leading-none">
-                            ✺
-                        </div>
-                    </div>
-                    <div class="absolute -top-6 -right-6 text-8xl animate-[spin_25s_linear_infinite] opacity-75">🌌</div>
-                    <div class="absolute -bottom-8 left-8 text-7xl animate-pulse">✨</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-12 left-1/2 flex flex-col items-center gap-y-2 text-white/40 text-xs tracking-[3px]">
-            <div class="w-px h-12 bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
-            ROLE PARA DESCOBRIR
-        </div>
-    </section>
+          <article class="feature-card tilt-card">
+            <p class="card-index">02</p>
+            <h3>Pequenas surpresas aleatórias</h3>
+            <p>
+              Um gerador de cenas malucas troca mensagens, cores e desafios
+              rápidos sempre que você quiser chacoalhar a cabeça.
+            </p>
+          </article>
 
-    <!-- A LUZ Section -->
-    <section id="luz" class="relative z-10 py-24 bg-black/60">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="flex flex-col md:flex-row gap-16 items-center">
-                <div class="md:w-5/12">
-                    <span class="text-purple-400 text-sm font-medium tracking-widest">CAPÍTULO 01</span>
-                    <h2 class="heading-font text-6xl font-bold leading-none mt-3">Sinta a luz<br>que ninguém vê.</h2>
-                    <p class="mt-8 text-xl text-white/70 leading-relaxed">
-                        Não é apenas uma tela. É um convite para sentir algo que transcende pixels. 
-                        Aqui o tempo desacelera. A respiração se alinha. A alma vibra.
-                    </p>
-                    <div class="mt-12 flex items-center gap-x-8">
-                        <div class="text-center">
-                            <div class="text-4xl font-semibold text-purple-300">∞</div>
-                            <div class="text-sm text-white/50">Duração eterna</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-4xl font-semibold text-purple-300">4K</div>
-                            <div class="text-sm text-white/50">Imersão total</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-4xl font-semibold text-purple-300">24/7</div>
-                            <div class="text-sm text-white/50">Sempre disponível</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card interativo de respiração -->
-                <div class="md:w-7/12 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-10">
-                    <div class="text-center mb-8">
-                        <h3 class="text-3xl font-medium">Exercício de respiração aurora</h3>
-                        <p class="text-purple-300 mt-1">Inspire luz • Expire sombras</p>
-                    </div>
-                    <div onclick="startBreathing()" id="breathingCircle"
-                         class="mx-auto w-52 h-52 rounded-full border-8 border-purple-400 flex items-center justify-center text-6xl cursor-pointer hover:scale-105 active:scale-95">
-                        🌬️
-                    </div>
-                    <p id="breathingText" class="text-center mt-8 text-xl font-light text-white/70">Clique no círculo e respire comigo</p>
-                </div>
-            </div>
-        </div>
-    </section>
+          <article class="feature-card tilt-card">
+            <p class="card-index">03</p>
+            <h3>Interações satisfatórias</h3>
+            <p>
+              Ripple no clique, magnetismo nos botões, cards com inclinação 3D
+              e uma aura que acompanha o mouse pela tela.
+            </p>
+          </article>
+        </section>
 
-    <!-- JORNADA Section -->
-    <section id="jornada" class="relative z-10 py-24">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="text-center mb-16">
-                <span class="px-5 py-2 rounded-3xl bg-white/10 text-sm">CAPÍTULO 02</span>
-                <h2 class="heading-font text-6xl mt-4 font-bold">Sua jornada em 4 fases</h2>
-            </div>
-            
-            <div class="grid md:grid-cols-4 gap-6">
-                <!-- Fase 1 -->
-                <div class="card-hover bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 text-center">
-                    <div class="text-5xl mb-6">🌑</div>
-                    <div class="text-purple-400 text-xs font-medium tracking-widest mb-2">FASE 01</div>
-                    <h3 class="text-2xl font-semibold mb-3">O Escuro</h3>
-                    <p class="text-white/70">Deixe o mundo exterior desaparecer. Apenas você e o vazio.</p>
-                    <div class="h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent my-8"></div>
-                    <p class="text-xs text-purple-300">2 minutos</p>
-                </div>
-                
-                <!-- Fase 2 -->
-                <div class="card-hover bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 text-center">
-                    <div class="text-5xl mb-6">🌌</div>
-                    <div class="text-purple-400 text-xs font-medium tracking-widest mb-2">FASE 02</div>
-                    <h3 class="text-2xl font-semibold mb-3">O Despertar</h3>
-                    <p class="text-white/70">As primeiras luzes surgem. Sinta o formigamento na pele.</p>
-                    <div class="h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent my-8"></div>
-                    <p class="text-xs text-purple-300">3 minutos</p>
-                </div>
-                
-                <!-- Fase 3 -->
-                <div class="card-hover bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 text-center">
-                    <div class="text-5xl mb-6">🌠</div>
-                    <div class="text-purple-400 text-xs font-medium tracking-widest mb-2">FASE 03</div>
-                    <h3 class="text-2xl font-semibold mb-3">O Fluxo</h3>
-                    <p class="text-white/70">As cores dançam. Você se torna parte da luz.</p>
-                    <div class="h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent my-8"></div>
-                    <p class="text-xs text-purple-300">4 minutos</p>
-                </div>
-                
-                <!-- Fase 4 -->
-                <div class="card-hover bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 text-center">
-                    <div class="text-5xl mb-6">🌅</div>
-                    <div class="text-purple-400 text-xs font-medium tracking-widest mb-2">FASE 04</div>
-                    <h3 class="text-2xl font-semibold mb-3">O Retorno</h3>
-                    <p class="text-white/70">Leve a luz consigo. O mundo nunca mais será o mesmo.</p>
-                    <div class="h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent my-8"></div>
-                    <p class="text-xs text-purple-300">Eterno</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <section class="control-room section-reveal" id="painel">
+          <div class="control-copy">
+            <p class="eyebrow">painel de descompressão</p>
+            <h2>Escolha uma centelha de caos bonito.</h2>
+            <p>
+              O painel abaixo foi feito para ser mexido sem culpa. Cada botão
+              muda o humor da estação e adiciona uma nova camada de ambientação.
+            </p>
+          </div>
 
-    <!-- GALERIA Section -->
-    <section id="galeria" class="relative z-10 py-24 bg-black/60">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="flex justify-between items-baseline mb-12">
-                <div>
-                    <span class="text-purple-400 text-sm font-medium">CAPÍTULO 03</span>
-                    <h2 class="heading-font text-6xl font-bold">Momentos capturados</h2>
-                </div>
-                <a onclick="smoothScrollTo('conectar')" class="text-sm uppercase flex items-center gap-x-2 hover:gap-x-3">
-                    VER TODOS 
-                    <span class="text-2xl">→</span>
-                </a>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="aspect-square bg-[radial-gradient(at_bottom_right,#6b21a8,#a855f7)] rounded-3xl flex items-end p-6 text-3xl font-light overflow-hidden">01 — Luz inicial</div>
-                <div class="aspect-square bg-[radial-gradient(at_top,#7e22ce,#c026d3)] rounded-3xl flex items-end p-6 text-3xl font-light overflow-hidden">02 — Pico de brilho</div>
-                <div class="aspect-square bg-[radial-gradient(at_center,#a855f7,#ec4899)] rounded-3xl flex items-end p-6 text-3xl font-light overflow-hidden">03 — Dança violeta</div>
-                <div class="aspect-square bg-[radial-gradient(at_left,#c026d3,#db2777)] rounded-3xl flex items-end p-6 text-3xl font-light overflow-hidden">04 — Silêncio final</div>
-            </div>
-        </div>
-    </section>
+          <div class="control-panel">
+            <button class="mode-chip active" type="button" data-mode="nebula">
+              Nebulosa
+            </button>
+            <button class="mode-chip" type="button" data-mode="sunset">
+              Pôr do Sol Elétrico
+            </button>
+            <button class="mode-chip" type="button" data-mode="midnight">
+              Meia-Noite Cromada
+            </button>
+            <button class="mode-chip" type="button" data-mode="aurora">
+              Aurora Ácida
+            </button>
+          </div>
 
-    <!-- TESTEMUNHOS -->
-    <section class="relative z-10 py-20 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="text-center mb-12">
-                <p class="uppercase text-purple-300 text-sm">Eles sentiram a mesma luz</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
-                    <p class="italic text-xl leading-tight">"Nunca imaginei que um site pudesse me fazer chorar de emoção. A luz me abraçou."</p>
-                    <div class="flex items-center gap-x-3 mt-8">
-                        <div class="w-9 h-9 bg-pink-300 rounded-2xl"></div>
-                        <div>
-                            <p class="font-medium">Mariana Costa</p>
-                            <p class="text-xs text-white/40">Salvador, BA • 17 de abril de 2026</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
-                    <p class="italic text-xl leading-tight">"Senti como se o universo estivesse dentro da minha tela. Simplesmente perfeito."</p>
-                    <div class="flex items-center gap-x-3 mt-8">
-                        <div class="w-9 h-9 bg-violet-300 rounded-2xl"></div>
-                        <div>
-                            <p class="font-medium">João Mendes</p>
-                            <p class="text-xs text-white/40">Fortaleza, CE • Hoje</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-8">
-                    <p class="italic text-xl leading-tight">"Volto toda noite. É o único lugar onde realmente me sinto em casa."</p>
-                    <div class="flex items-center gap-x-3 mt-8">
-                        <div class="w-9 h-9 bg-purple-300 rounded-2xl"></div>
-                        <div>
-                            <p class="font-medium">Laura Silva</p>
-                            <p class="text-xs text-white/40">Rio de Janeiro, RJ • 3x esta semana</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+          <div class="mission-board">
+            <article class="mission-card large tilt-card">
+              <p class="panel-kicker">micro-missão instantânea</p>
+              <h3 id="missionText">Observe a tela por 8 segundos como se fosse a janela de uma nave.</h3>
+              <div class="mission-meta">
+                <span id="missionDuration">8 segundos</span>
+                <span id="missionMood">contemplativo</span>
+              </div>
+            </article>
 
-    <!-- CONECTAR / FORM -->
-    <section id="conectar" class="relative z-10 py-24">
-        <div class="max-w-screen-2xl mx-auto px-8">
-            <div class="max-w-2xl mx-auto bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-12">
-                <h2 class="heading-font text-5xl text-center font-bold mb-2">Entre na luz</h2>
-                <p class="text-center text-white/60 mb-10">Deixe seu nome e e-mail. A aurora entrará em contato.</p>
-                
-                <form onsubmit="handleSubmit(event)" class="space-y-8">
-                    <div>
-                        <label class="block text-sm uppercase tracking-widest mb-2">Seu nome</label>
-                        <input id="name" type="text" required 
-                               class="w-full bg-transparent border border-white/30 focus:border-purple-400 rounded-2xl px-7 py-6 text-lg outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm uppercase tracking-widest mb-2">Seu e-mail</label>
-                        <input id="email" type="email" required 
-                               class="w-full bg-transparent border border-white/30 focus:border-purple-400 rounded-2xl px-7 py-6 text-lg outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm uppercase tracking-widest mb-2">O que você sente agora?</label>
-                        <textarea id="message" rows="4" required
-                                  class="w-full bg-transparent border border-white/30 focus:border-purple-400 rounded-3xl px-7 py-6 text-lg outline-none resize-none"></textarea>
-                    </div>
-                    
-                    <button type="submit"
-                            class="w-full py-7 text-xl font-semibold bg-gradient-to-r from-purple-500 via-violet-500 to-purple-600 rounded-3xl hover:brightness-110">
-                        ENVIAR PARA A AURORA
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
+            <article class="mission-card tilt-card">
+              <p class="panel-kicker">detalhe da vez</p>
+              <h3 id="detailTitle">Reflexo Líquido</h3>
+              <p id="detailText">
+                A camada superior está usando brilho deslocado e sombras frias
+                para parecer um visor de vidro em órbita.
+              </p>
+            </article>
 
-    <!-- FOOTER -->
-    <footer class="relative z-50 border-t border-white/10 bg-black py-12">
-        <div class="max-w-screen-2xl mx-auto px-8 text-white/40 text-sm flex flex-col md:flex-row justify-between items-center gap-y-6">
-            <div>© 2026 AURORA • Feito com luz pura</div>
-            <div class="flex gap-x-8">
-                <a href="#" class="hover:text-purple-400">Instagram</a>
-                <a href="#" class="hover:text-purple-400">X</a>
-                <a href="#" class="hover:text-purple-400">WhatsApp</a>
-                <a href="#" class="hover:text-purple-400">Telegram</a>
-            </div>
-            <div class="flex items-center gap-x-1">
-                Feito com 
-                <span class="text-purple-400 text-xl">✺</span> 
-                para você
-            </div>
-        </div>
-    </footer>
+            <article class="mission-card tilt-card">
+              <p class="panel-kicker">nível de tédio</p>
+              <div class="boredom-meter" aria-label="Medidor de tédio">
+                <span class="boredom-fill" id="boredomFill"></span>
+              </div>
+              <strong id="boredomValue">12% restante</strong>
+            </article>
+          </div>
+        </section>
 
-    <!-- Modal de entrada -->
-    <div onclick="if(event.target.id === 'modalOverlay')closeModal()" 
-         id="modalOverlay"
-         class="hidden fixed inset-0 bg-black/90 backdrop-blur-3xl z-[9999] flex items-center justify-center">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="modal bg-black border border-purple-400/30 rounded-3xl max-w-lg w-full mx-4 p-10">
-            <h2 class="text-4xl heading-font font-bold text-center mb-8">Bem-vindo à AURORA</h2>
-            <p class="text-center text-white/70 mb-10">Você está prestes a entrar em um espaço que respira com você.</p>
-            
-            <div class="space-y-6">
-                <button onclick="closeModal();startExperience()" 
-                        class="w-full py-6 text-2xl font-medium bg-white text-black rounded-3xl">
-                    Entrar agora
-                </button>
-                <button onclick="closeModal()" 
-                        class="w-full py-6 text-white/60 border border-white/30 rounded-3xl">
-                    Ainda não estou pronto
-                </button>
-            </div>
-            
-            <div class="text-center text-xs text-purple-300 mt-8">Pressione ESC para sair</div>
-        </div>
+        <section class="trigger-grid section-reveal" id="gatilhos">
+          <article class="trigger-card tilt-card">
+            <p class="trigger-label">gatilho 01</p>
+            <h3>Foco teatral</h3>
+            <p>
+              Ative o modo hipnótico para desacelerar o fundo e aumentar o
+              contraste das luzes como se a página estivesse respirando.
+            </p>
+          </article>
+
+          <article class="trigger-card tilt-card">
+            <p class="trigger-label">gatilho 02</p>
+            <h3>Mar de partículas</h3>
+            <p>
+              As partículas flutuam em velocidades diferentes para criar uma
+              sensação sutil de profundidade e movimento contínuo.
+            </p>
+          </article>
+
+          <article class="trigger-card tilt-card">
+            <p class="trigger-label">gatilho 03</p>
+            <h3>Clique recompensado</h3>
+            <p>
+              Cada ação deixa uma onda breve no botão, porque interfaces boas
+              também brincam de responder ao toque.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="site-footer section-reveal">
+        <p>Feito para espantar o vazio de uma tarde qualquer.</p>
+        <a href="#top">Voltar ao início</a>
+      </footer>
     </div>
 
-    <script>
-        // Configuração Tailwind
-        function initializeTailwind() {
-            return {
-                config(userConfig = {}) {
-                    return {
-                        content: [],
-                        theme: {
-                            extend: {},
-                        },
-                        plugins: [],
-                        ...userConfig,
-                    }
-                },
-                theme: {
-                    extend: {},
-                },
-            }
-        }
-        
-        // Sistema de partículas premium
-        function createParticles() {
-            const canvas = document.getElementById('canvas')
-            const ctx = canvas.getContext('2d')
-            
-            let width = window.innerWidth
-            let height = window.innerHeight
-            let particlesArray = []
-            
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * width
-                    this.y = Math.random() * height
-                    this.size = Math.random() * 4 + 1
-                    this.speedX = Math.random() * 0.8 - 0.4
-                    this.speedY = Math.random() * 0.8 - 0.4
-                    this.hue = Math.random() * 80 + 260 // tons de roxo-rosa para aurora
-                }
-                
-                update() {
-                    this.x += this.speedX
-                    this.y += this.speedY
-                    
-                    if (this.x < 0 || this.x > width) this.speedX *= -1
-                    if (this.y < 0 || this.y > height) this.speedY *= -1
-                    
-                    // Leve oscilação natural
-                    this.speedX += (Math.random() - 0.5) * 0.1
-                    this.speedY += (Math.random() - 0.5) * 0.1
-                }
-                
-                draw() {
-                    ctx.fillStyle = `hsla(${this.hue}, 90%, 85%, 0.85)`
-                    ctx.shadowBlur = 12
-                    ctx.shadowColor = `hsla(${this.hue}, 90%, 85%, 1)`
-                    ctx.beginPath()
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-                    ctx.fill()
-                    ctx.shadowBlur = 0
-                }
-            }
-            
-            function resizeCanvas() {
-                width = window.innerWidth
-                height = window.innerHeight
-                canvas.width = width
-                canvas.height = height
-            }
-            
-            function connectParticles() {
-                for (let i = 0; i < particlesArray.length; i++) {
-                    for (let j = i; j < particlesArray.length; j++) {
-                        const dx = particlesArray[i].x - particlesArray[j].x
-                        const dy = particlesArray[i].y - particlesArray[j].y
-                        const distance = Math.sqrt(dx * dx + dy * dy)
-                        
-                        if (distance < 130) {
-                            ctx.strokeStyle = `hsla(270, 85%, 75%, ${1 - distance / 130})`
-                            ctx.lineWidth = 0.8
-                            ctx.beginPath()
-                            ctx.moveTo(particlesArray[i].x, particlesArray[i].y)
-                            ctx.lineTo(particlesArray[j].x, particlesArray[j].y)
-                            ctx.stroke()
-                        }
-                    }
-                }
-            }
-            
-            function animate() {
-                ctx.fillStyle = 'rgba(10, 10, 10, 0.12)'
-                ctx.fillRect(0, 0, width, height)
-                
-                for (let i = 0; i < particlesArray.length; i++) {
-                    particlesArray[i].update()
-                    particlesArray[i].draw()
-                }
-                
-                connectParticles()
-                requestAnimationFrame(animate)
-            }
-            
-            // Inicialização
-            window.addEventListener('resize', resizeCanvas)
-            resizeCanvas()
-            
-            for (let i = 0; i < 280; i++) {
-                particlesArray.push(new Particle())
-            }
-            
-            animate()
-            
-            // Retorna função para limpar se necessário
-            return { resizeCanvas }
-        }
-        
-        // Scroll suave
-        function smoothScrollTo(section) {
-            const element = document.getElementById(section)
-            if (element) {
-                const navHeight = 90
-                const elementPosition = element.getBoundingClientRect().top
-                const offsetPosition = elementPosition + window.scrollY - navHeight
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                })
-            }
-        }
-        
-        // Menu mobile
-        let mobileOpen = false
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu')
-            const hamburger = document.getElementById('hamburger')
-            mobileOpen = !mobileOpen
-            
-            if (mobileOpen) {
-                menu.classList.remove('hidden')
-                menu.classList.add('flex', 'flex-col')
-                hamburger.innerHTML = '✕'
-            } else {
-                menu.classList.add('hidden')
-                menu.classList.remove('flex', 'flex-col')
-                hamburger.innerHTML = '☰'
-            }
-        }
-        
-        // Modal
-        function openModal() {
-            document.getElementById('modalOverlay').classList.remove('hidden')
-            document.getElementById('modalOverlay').classList.add('flex')
-        }
-        
-        function closeModal() {
-            const overlay = document.getElementById('modalOverlay')
-            overlay.classList.add('hidden')
-            overlay.classList.remove('flex')
-        }
-        
-        // Experiência de respiração
-        let breathingInterval = null
-        function startBreathing() {
-            const circle = document.getElementById('breathingCircle')
-            const text = document.getElementById('breathingText')
-            
-            if (breathingInterval) {
-                clearInterval(breathingInterval)
-                breathingInterval = null
-                circle.style.transform = 'scale(1)'
-                text.textContent = 'Clique novamente para recomeçar'
-                return
-            }
-            
-            let phase = 0
-            text.textContent = 'Inspire... (4s)'
-            
-            breathingInterval = setInterval(() => {
-                phase++
-                
-                if (phase % 4 === 1) {
-                    // Inspire
-                    circle.style.transform = 'scale(1.35)'
-                    text.textContent = 'Inspire profundamente...'
-                } else if (phase % 4 === 2) {
-                    // Segure
-                    circle.style.transform = 'scale(1.35)'
-                    text.textContent = 'Segure a luz...'
-                } else if (phase % 4 === 3) {
-                    // Expire
-                    circle.style.transform = 'scale(1)'
-                    text.textContent = 'Expire devagar...'
-                } else {
-                    // Segure vazio
-                    circle.style.transform = 'scale(1)'
-                    text.textContent = 'Sinta o vazio...'
-                }
-                
-                if (phase >= 16) {
-                    clearInterval(breathingInterval)
-                    breathingInterval = null
-                    text.textContent = 'Sessão completa. Sinta a paz.'
-                    setTimeout(() => {
-                        text.textContent = 'Clique no círculo para repetir'
-                    }, 3000)
-                }
-            }, 4000)
-        }
-        
-        // Iniciar experiência completa
-        function startExperience() {
-            closeModal()
-            
-            // Efeito especial de tela piscando suave
-            const body = document.body
-            body.style.transitionDuration = '800ms'
-            body.style.filter = 'brightness(1.8) saturate(1.4)'
-            
-            setTimeout(() => {
-                body.style.filter = 'none'
-            }, 800)
-            
-            // Scroll automático para a seção de respiração
-            setTimeout(() => {
-                smoothScrollTo('luz')
-            }, 1200)
-            
-            console.log('%c🌌 Bem-vindo à AURORA. Você agora faz parte da luz.', 'color:#c026d3; font-family:monospace; font-size:13px')
-        }
-        
-        // Envio do formulário
-        function handleSubmit(e) {
-            e.preventDefault()
-            
-            const name = document.getElementById('name').value
-            const email = document.getElementById('email').value
-            
-            // Simulação de envio bem sucedida
-            const btns = document.querySelectorAll('button[type="submit"]')
-            const originalText = btns[0].innerHTML
-            
-            btns[0].innerHTML = `
-                <span class="inline-flex items-center gap-x-3">
-                    <span class="animate-spin">✺</span>
-                    ENVIANDO PARA AS ESTRELAS...
-                </span>
-            `
-            setTimeout(() => {
-                btns[0].style.background = 'linear-gradient(to right, #22c55e, #86efac)'
-                btns[0].innerHTML = `✓ Enviado com sucesso, ${name.split(' ')[0]}! A aurora agradece.`
-                
-                setTimeout(() => {
-                    // Reset form
-                    e.target.reset()
-                    btns[0].style.background = ''
-                    btns[0].innerHTML = originalText
-                    
-                    // Feedback final
-                    alert(`🌟 Obrigado, ${name}! Sua mensagem foi recebida pela luz. Volte sempre.`)
-                }, 2800)
-            }, 2100)
-        }
-        
-        // Toggle tema (claro/escuro) – mas mantém a essência
-        function toggleTheme() {
-            const body = document.body
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode')
-                document.getElementById('theme-icon').textContent = '☀️'
-                body.style.background = '#0a0a0a'
-            } else {
-                body.classList.add('light-mode')
-                document.getElementById('theme-icon').textContent = '🌙'
-                body.style.background = '#f8f1eb'
-            }
-        }
-        
-        // Inicialização completa do site
-        function initializeSite() {
-            console.log('%cAURORA inicializada com sucesso. Sem erros.', 'color:#a855f7; font-weight:600')
-            
-            // Tailwind
-            initializeTailwind()
-            
-            // Partículas
-            createParticles()
-            
-            // Keyboard ESC para modal
-            document.addEventListener('keydown', function(e) {
-                if (e.key === "Escape") {
-                    const overlay = document.getElementById('modalOverlay')
-                    if (overlay && !overlay.classList.contains('hidden')) {
-                        closeModal()
-                    }
-                }
-            })
-            
-            console.log('%c✅ Tudo verificado 30 vezes. Código 100% funcional, sem erros, altamente polido e imersivo.', 'color:#22c55e; font-family:monospace')
-        }
-        
-        // Iniciar tudo quando o DOM estiver pronto
-        window.onload = initializeSite
-    </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
